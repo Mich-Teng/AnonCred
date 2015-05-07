@@ -42,7 +42,7 @@ func Handle(buf []byte,addr *net.UDPAddr, tmpCoordinator *Coordinator, n int) {
 		handleRoundEnd()
 		break
 	case proto.ANNOUNCEMENT:
-		handleAnnouncement()
+		handleAnnouncement(event.Params)
 		break
 	default:
 		fmt.Println("[fatal] Unrecognized request...")
@@ -50,6 +50,29 @@ func Handle(buf []byte,addr *net.UDPAddr, tmpCoordinator *Coordinator, n int) {
 	}
 }
 
+
+// Handler for ANNOUNCEMENT event
+// finish announcement and send start message signal to the clients
+func handleAnnouncement(params map[string]interface{}) {
+	// This event is triggered when server finishes announcement
+	// distribute final reputation map to servers
+	var g = anonCoordinator.Suite.Point()
+	byteG := params["g"].([]byte)
+	err := g.UnmarshalBinary(byteG)
+	util.CheckErr(err)
+	// distribute g and hash table of ids to user
+	pm := map[string]interface{}{
+		"g": params["g"].([]byte),
+	}
+	event := &proto.Event{proto.ANNOUNCEMENT,pm}
+	for _,val := range anonCoordinator.Clients {
+		util.Send(anonCoordinator.Socket,val,util.Encode(event))
+	}
+
+	// set controller's new g
+	anonCoordinator.G = g
+	anonCoordinator.Status = MESSAGE
+}
 
 // handle server register request
 func handleServerRegister() {
@@ -100,13 +123,7 @@ func handleClientRegisterServerSide() {
 
 }
 
-// Handler for ANNOUNCEMENT event
-// finish announcement and send start message signal to the clients
-func handleAnnouncement() {
-	// This event is triggered when server finishes announcement
-	// distribute final reputation map to servers
 
-}
 
 func handleMsg() {
 
