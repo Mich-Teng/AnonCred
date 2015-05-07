@@ -2,11 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="274173ca-fb8a-403a-8e7d-c0780dacf585" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/server/AnonServerHandler.go" afterPath="$PROJECT_DIR$/src/server/AnonServerHandler.go" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/client/ClientHandler.go" afterPath="$PROJECT_DIR$/src/client/ClientHandler.go" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Coordinator.go" afterPath="$PROJECT_DIR$/src/Coordinator.go" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/coordinator/CoordinatorHandler.go" afterPath="$PROJECT_DIR$/src/coordinator/CoordinatorHandler.go" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main.go" afterPath="$PROJECT_DIR$/src/main.go" />
     </list>
     <ignored path="Anonymity.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -91,8 +87,8 @@
       <file leaf-file-name="CoordinatorHandler.go" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/coordinator/CoordinatorHandler.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.72115386">
-              <caret line="90" column="44" selection-start-line="90" selection-start-column="44" selection-end-line="90" selection-end-column="44" />
+            <state vertical-scroll-proportion="0.54086536">
+              <caret line="85" column="5" selection-start-line="85" selection-start-column="5" selection-end-line="85" selection-end-column="5" />
               <folding />
             </state>
           </provider>
@@ -173,10 +169,10 @@
         <option value="$PROJECT_DIR$/src/coordinator/Coordinator.go" />
         <option value="$PROJECT_DIR$/src/util/Util.go" />
         <option value="$PROJECT_DIR$/src/client/ClientHandler.go" />
-        <option value="$PROJECT_DIR$/src/coordinator/CoordinatorHandler.go" />
         <option value="$PROJECT_DIR$/src/Coordinator.go" />
         <option value="$PROJECT_DIR$/src/main.go" />
         <option value="$PROJECT_DIR$/src/server/AnonServerHandler.go" />
+        <option value="$PROJECT_DIR$/src/coordinator/CoordinatorHandler.go" />
       </list>
     </option>
   </component>
@@ -1073,8 +1069,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/coordinator/CoordinatorHandler.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.72115386">
-          <caret line="90" column="44" selection-start-line="90" selection-start-column="44" selection-end-line="90" selection-end-column="44" />
+        <state vertical-scroll-proportion="0.54086536">
+          <caret line="85" column="5" selection-start-line="85" selection-start-column="5" selection-end-line="85" selection-end-column="5" />
           <folding />
         </state>
       </provider>

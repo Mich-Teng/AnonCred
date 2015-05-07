@@ -84,7 +84,6 @@ func handleAnnouncement(params map[string]interface{}) {
 	pm := map[string]interface{}{
 		"g": params["g"].([]byte),
 	}
-	fmt.Println("send announcement")
 	fmt.Println(len(anonCoordinator.Clients))
 	event := &proto.Event{proto.ANNOUNCEMENT,pm}
 	for _,val := range anonCoordinator.Clients {
