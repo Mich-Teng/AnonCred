@@ -60,6 +60,11 @@ func Handle(buf []byte,addr *net.UDPAddr, tmpCoordinator *Coordinator, n int) {
 func handleAnnouncement(params map[string]interface{}) {
 	// This event is triggered when server finishes announcement
 	// distribute final reputation map to servers
+	if params["g"] == nil {
+		// suggest there is no client
+		anonCoordinator.Status = MESSAGE
+		return
+	}
 	var g = anonCoordinator.Suite.Point()
 	byteG := params["g"].([]byte)
 	err := g.UnmarshalBinary(byteG)
@@ -94,6 +99,20 @@ func handleServerRegister() {
 	fmt.Println("[debug] Receive the registration info from server " + srcAddr.String());
 	// send reply to the new server
 	lastServer := anonCoordinator.GetLastServer()
+
+	// update next hop for previous server
+	if lastServer != nil {
+		pm2 := map[string]interface{}{
+			"reply": true,
+			"next_hop": srcAddr.String(),
+		}
+		event2 := &proto.Event{proto.UPDATE_NEXT_HOP, pm2}
+		util.Send(anonCoordinator.Socket, lastServer, util.Encode(event2))
+	}
+
+	if lastServer == nil {
+		lastServer = anonCoordinator.LocalAddr
+	}
 	pm1 := map[string]interface{}{
 		"reply": true,
 		"prev_server": lastServer.String(),
@@ -101,16 +120,6 @@ func handleServerRegister() {
 	event1 := &proto.Event{proto.SERVER_REGISTER_REPLY,pm1}
 	util.Send(anonCoordinator.Socket,srcAddr,util.Encode(event1))
 
-	// update next hop for previous server
-
-	if (lastServer != nil) {
-		pm2 := map[string]interface{}{
-			"reply": true,
-			"next_hop": srcAddr.String(),
-		}
-		event2 := &proto.Event{proto.UPDATE_NEXT_HOP, pm2}
-		util.Send(anonCoordinator.Socket, srcAddr, util.Encode(event2))
-	}
 	anonCoordinator.AddServer(srcAddr);
 }
 

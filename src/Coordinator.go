@@ -107,6 +107,7 @@ func roundEnd() {
 	}
 	event := &proto.Event{proto.ROUND_END,pm}
 	util.Send(anonCoordinator.Socket,lastServer,util.Encode(event))
+	anonCoordinator.Status = coordinator.READY_FOR_NEW_ROUND
 }
 
 func main() {
@@ -127,6 +128,8 @@ func main() {
 			break
 		}
 	}
+	fmt.Println("[coordinator] Servers in the current network:")
+	fmt.Println(anonCoordinator.ServerList)
 	anonCoordinator.Status = coordinator.READY_FOR_NEW_ROUND
 	for {
 		for i := 0; i < 100; i++ {

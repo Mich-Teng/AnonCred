@@ -41,7 +41,7 @@ type Coordinator struct {
 }
 
 // get last server in topology
-func (c Coordinator) GetLastServer() *net.UDPAddr {
+func (c *Coordinator) GetLastServer() *net.UDPAddr {
 	if len(c.ServerList) == 0 {
 		return nil
 	}
@@ -49,14 +49,14 @@ func (c Coordinator) GetLastServer() *net.UDPAddr {
 }
 
 // get first server in topology
-func (c Coordinator) GetFirstServer() *net.UDPAddr {
+func (c *Coordinator) GetFirstServer() *net.UDPAddr {
 	if len(c.ServerList) == 0 {
 		return nil
 	}
 	return c.ServerList[0]
 }
 
-func (c Coordinator) AddClient(key abstract.Point, val *net.UDPAddr) {
+func (c *Coordinator) AddClient(key abstract.Point, val *net.UDPAddr) {
 	// delete the client who has same ip address
 	for k,v := range c.Clients {
 		if v.String() == val.String() {
@@ -68,18 +68,18 @@ func (c Coordinator) AddClient(key abstract.Point, val *net.UDPAddr) {
 }
 
 // add server into topology
-func (c Coordinator) AddServer(addr *net.UDPAddr){
+func (c *Coordinator) AddServer(addr *net.UDPAddr){
 	c.ServerList = append(c.ServerList,addr)
 }
 
 // add msg log and return msg id
-func (c Coordinator) AddMsgLog(log abstract.Point) int{
+func (c *Coordinator) AddMsgLog(log abstract.Point) int{
 	c.MsgLog = append(c.MsgLog,log)
 	return len(c.MsgLog)
 }
 
 // get reputation
-func (c Coordinator) GetReputation(key abstract.Point) int{
+func (c *Coordinator) GetReputation(key abstract.Point) int{
 	return c.DecryptedReputationMap[key]
 }
 

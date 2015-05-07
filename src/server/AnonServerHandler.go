@@ -46,6 +46,12 @@ func Handle(buf []byte,addr *net.UDPAddr, tmpServer *AnonServer, n int) {
 
 func handleRoundEnd(params map[string]interface{}) {
 	keyList := util.ProtobufDecodePointList(params["keys"].([]byte))
+	if(len(keyList) == 0) {
+		// do nothing, just send the package to next server if the client list is empty
+		event := &proto.Event{proto.ROUND_END,params}
+		util.Send(anonServer.Socket,anonServer.NextHop,util.Encode(event))
+		return
+	}
 	var byteValList [][]byte
 	if _, ok := params["start"]; ok {
 		valList := params["vals"].([]int)
@@ -139,6 +145,12 @@ func handleAnnouncement(params map[string]interface{}) {
 	var g = anonServer.Suite.Point()
 	keyList := util.ProtobufDecodePointList(params["keys"].([]byte))
 	valList := util.ProtobufDecodePointList(params["vals"].([]byte))
+	if(len(keyList) == 0) {
+		// do nothing, just send the package to next server if the client list is empty
+		event := &proto.Event{proto.ANNOUNCEMENT,params}
+		util.Send(anonServer.Socket,anonServer.NextHop,util.Encode(event))
+		return
+	}
 	if val, ok := params["g"]; ok {
 		// contains g
 		byteG := val.([]byte)
