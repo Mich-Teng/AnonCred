@@ -236,7 +236,7 @@ func handleVote(params map[string]interface{}) {
 // send user round end notification
 func handleRoundEnd() {
 	// send user round-end message
-	pm := map[string]interface{}
+	pm := map[string]interface{} {}
 	event := &proto.Event{proto.ROUND_END,pm}
 	for _,val := range anonCoordinator.Clients {
 		util.Send(anonCoordinator.Socket,val,util.Encode(event))

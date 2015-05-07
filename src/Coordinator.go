@@ -39,8 +39,7 @@ func initCoordinator() {
 
 	anonCoordinator = &coordinator.Coordinator{ServerAddr,nil,nil,
 		coordinator.CONFIGURATION,suite,a,A,nil, make(map[abstract.Point]*net.UDPAddr),
-		make(map[abstract.Point]abstract.Point), make(map[abstract.Point]*net.UDPAddr),
-		make(map[abstract.Point]abstract.Point), nil, nil, nil}
+		make(map[abstract.Point]abstract.Point), nil, nil, make(map[abstract.Point]int)}
 }
 
 
@@ -94,7 +93,7 @@ func roundEnd() {
 	keys := make([]abstract.Point,size)
 	vals := make([]int,size)
 	i := 0
-	for k, v := range anonCoordinator.ReputationMap {
+	for k, v := range anonCoordinator.DecryptedReputationMap {
 		keys[i] = k
 		vals[i] = v
 		i++

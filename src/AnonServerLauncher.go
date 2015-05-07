@@ -44,8 +44,7 @@ func initAnonServer() {
 	suite := nist.NewAES128SHA256QR512()
 	a := suite.Secret().Pick(random.Stream)
 	A := suite.Point().Mul(nil, a)
-	RoundKey, err := suite.Secret().Pick(random.Stream)
-	util.CheckErr(err)
+	RoundKey := suite.Secret().Pick(random.Stream)
 	anonServer = &server.AnonServer{ServerAddr,nil,suite,a,A,suite.Point(),nil,
 	false,nil,nil,make(map[abstract.Point]abstract.Point),nil,RoundKey}
 }

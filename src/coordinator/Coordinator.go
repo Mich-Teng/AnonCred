@@ -2,9 +2,6 @@ package coordinator
 import (
 	"github.com/dedis/crypto/abstract"
 	"net"
-	"bytes"
-	"encoding/binary"
-	"util"
 )
 
 type Coordinator struct {

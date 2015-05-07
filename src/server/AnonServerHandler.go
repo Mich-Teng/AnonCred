@@ -9,7 +9,7 @@ import (
 	"github.com/dedis/crypto/abstract"
 	"github.com/dedis/crypto/shuffle"
 	"github.com/dedis/crypto/proof"
-	"strconv"
+	"github.com/dedis/crypto/random"
 )
 
 var srcAddr *net.UDPAddr
@@ -45,7 +45,6 @@ func Handle(buf []byte,addr *net.UDPAddr, tmpServer *AnonServer, n int) {
 }
 
 func handleRoundEnd(params map[string]interface{}) {
-	var g = anonServer.Suite.Point()
 	keyList := util.ProtobufDecodePointList(params["keys"].([]byte))
 	var byteValList [][]byte
 	if _, ok := params["start"]; ok {
@@ -68,7 +67,7 @@ func handleRoundEnd(params map[string]interface{}) {
 		}
 		// construct byte Val list
 		for i:=0; i < len(valList); i++ {
-			byteValList[i] = valList[i].Data()
+			byteValList[i], _ = valList[i].Data()
 		}
 	}
 
@@ -80,7 +79,9 @@ func handleRoundEnd(params map[string]interface{}) {
 		// decrypt the public key
 		newKeys[i] = anonServer.KeyMap[keyList[i]]
 		// encrypt the reputation using ElGamal algorithm
-		newVals[i] = util.ElGamalEncrypt(anonServer.Suite,anonServer.PublicKey,byteValList[i])
+		K,C,_ := util.ElGamalEncrypt(anonServer.Suite,anonServer.PublicKey,byteValList[i])
+		newVals[i] = C
+		anonServer.A = K
 	}
 
 	// *** perform neff shuffle here ***
@@ -94,7 +95,6 @@ func handleRoundEnd(params map[string]interface{}) {
 	byteYbar := util.ProtobufEncodePointList(Ybar)
 	byteNewKeys := util.ProtobufEncodePointList(newKeys)
 	byteNewVals := util.ProtobufEncodePointList(newVals)
-	byteG, _ := g.MarshalBinary()
 	// prev keys means the key before shuffle
 	pm := map[string]interface{}{
 		"keys" : byteXbar,
@@ -103,8 +103,12 @@ func handleRoundEnd(params map[string]interface{}) {
 		"prev_keys": byteNewKeys,
 		"prev_vals": byteNewVals,
 	}
-	event := &proto.Event{proto.ANNOUNCEMENT,pm}
+	event := &proto.Event{proto.ROUND_END,pm}
 	util.Send(anonServer.Socket,anonServer.PreviousHop,util.Encode(event))
+
+	// reset RoundKey and key map
+	anonServer.Roundkey = anonServer.Suite.Secret().Pick(random.Stream)
+	anonServer.KeyMap = make(map[abstract.Point]abstract.Point)
 }
 
 // encrypt the public key and send to next hop
@@ -114,9 +118,10 @@ func handleClientRegisterServerSide(params map[string]interface{}) {
 	util.CheckErr(err)
 
 	newKey := anonServer.Suite.Point().Mul(publicKey,anonServer.Roundkey)
-
+	byteNewKey, err := newKey.MarshalBinary()
+	util.CheckErr(err)
 	pm := map[string]interface{}{
-		"public_key" : newKey.MarshalBinary(),
+		"public_key" : byteNewKey,
 	}
 	event := &proto.Event{proto.CLIENT_REGISTER_SERVERSIDE,pm}
 	util.Send(anonServer.Socket,anonServer.NextHop,util.Encode(event))
