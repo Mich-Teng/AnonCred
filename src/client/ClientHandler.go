@@ -32,9 +32,6 @@ func Handle(buf []byte,addr *net.UDPAddr, dissentClient *DissentClient, n int) {
 	case proto.VOTE_REPLY:
 		handleVoteReply(event.Params)
 		break
-	case proto.CLIENT_REGISTER_SERVERSIDE:
-		test(event.Params)
-		break
 	default:
 		fmt.Println("Unrecognized request")
 		break
@@ -42,10 +39,6 @@ func Handle(buf []byte,addr *net.UDPAddr, dissentClient *DissentClient, n int) {
 
 }
 
-func test(params map[string]interface{}) {
-	ServerAddr,_ := net.ResolveUDPAddr("udp",params["addr"].(string))
-	fmt.Println(ServerAddr)
-}
 
 // print out register success info
 func handleRegisterConfirmation(dissentClient *DissentClient) {

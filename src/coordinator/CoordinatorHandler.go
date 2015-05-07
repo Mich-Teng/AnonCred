@@ -152,7 +152,7 @@ func handleClientRegisterServerSide(params map[string]interface{}) {
 	addr,err := net.ResolveUDPAddr("udp",addrStr)
 	util.CheckErr(err)
 	pm := map[string]interface{}{}
-	event := &proto.Event{proto.CLIENT_REGISTER_SERVERSIDE,pm}
+	event := &proto.Event{proto.CLIENT_REGISTER_CONFIRMATION,pm}
 	util.Send(anonCoordinator.Socket,addr,util.Encode(event))
 
 	// instead of sending new client to server, we will send it when finishing this round. Currently we just add it into buffer

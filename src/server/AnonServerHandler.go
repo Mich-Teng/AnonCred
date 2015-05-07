@@ -128,10 +128,12 @@ func handleClientRegisterServerSide(params map[string]interface{}) {
 	util.CheckErr(err)
 	pm := map[string]interface{}{
 		"public_key" : byteNewKey,
+		"addr" : params["addr"].(string),
 	}
 	event := &proto.Event{proto.CLIENT_REGISTER_SERVERSIDE,pm}
 	util.Send(anonServer.Socket,anonServer.NextHop,util.Encode(event))
 	// add into key map
+	fmt.Println("[debug] Receive client register request... ")
 	anonServer.KeyMap[newKey] = publicKey
 }
 
