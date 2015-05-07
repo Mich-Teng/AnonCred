@@ -26,6 +26,14 @@ func Send(conn *net.UDPConn, addr *net.UDPAddr,content []byte) {
 	fmt.Println("send response")
 }
 
+func SendToCoodinator(conn *net.UDPConn, content []byte) {
+	_,err := conn.Write(content)
+	if err != nil {
+		fmt.Printf("Couldn't send response %v", err)
+	}
+	fmt.Println("send response")
+}
+
 func CheckErr(err error) {
 	if err != nil {
 		log.Fatal("decode fails")

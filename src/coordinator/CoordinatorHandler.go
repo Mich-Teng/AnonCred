@@ -22,7 +22,7 @@ func Handle(buf []byte,addr *net.UDPAddr, anonCoordinator *Coordinator, n int) {
 		handleServerRegister()
 		break
 	case proto.CLIENT_REGISTER_CONTROLLERSIDE:
-		handleClientRegisterControllerSide();
+		handleClientRegisterControllerSide(event.Params,);
 		break
 	case proto.CLIENT_REGISTER_SERVERSIDE:
 		handleClientRegisterServerSide();
@@ -52,8 +52,14 @@ func handleServerRegister() {
 }
 
 
-func handleClientRegisterControllerSide() {
-	fmt.Println("receive register")
+
+// Handler for REGISTER event
+// send the register request to server to do encryption
+func handleClientRegisterControllerSide(params map[string]interface{}) {
+	// add client to current map. Currently, we store this data in controller. However, we could
+	// randomly assign a server to deal with the client, which has a better load balance
+	fmt.Println("client register")
+
 }
 
 func handleClientRegisterServerSide() {

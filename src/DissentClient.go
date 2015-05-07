@@ -2,26 +2,22 @@ package main
 
 import (
 	"fmt"
-//	"log"
 	"net"
-//	"os"
-//	"bufio"
-	"encoding/gob"
+
 	"./proto"
 	 "./util"
 	"./client"
-//	"strings"
 	"strconv"
 	"github.com/dedis/crypto/nist"
 	"github.com/dedis/crypto/random"
-//	"time"
+
 	"github.com/dedis/protobuf"
-	"bytes"
 	"bufio"
 	"os"
 	"strings"
 	"log"
 	"time"
+
 )
 
 var dissentClient  *client.DissentClient
@@ -34,10 +30,9 @@ func register() {
 		"PublicKey": bytePublicKey,
 	}
 	event := &proto.Event{proto.CLIENT_REGISTER_CONTROLLERSIDE,params}
-	var network bytes.Buffer
-	gob.NewEncoder(&network).Encode(event)
-	_,err := dissentClient.Socket.Write(network.Bytes())
-	util.CheckErr(err)
+
+	util.SendToCoodinator(dissentClient.Socket,util.Encode(event))
+
 
 }
 
@@ -74,7 +69,7 @@ func sendSigRequest(text string, eventType int) {
 	}
 	event := &proto.Event{eventType,params}
 	// send to coordinator
-	util.Send(dissentClient.Socket,dissentClient.CoordinatorAddr,util.Encode(event))
+	util.SendToCoodinator(dissentClient.Socket,util.Encode(event))
 }
 
 // send vote to server

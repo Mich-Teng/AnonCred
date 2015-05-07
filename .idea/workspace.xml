@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="274173ca-fb8a-403a-8e7d-c0780dacf585" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Coordinator.go" afterPath="$PROJECT_DIR$/src/Coordinator.go" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/coordinator/CoordinatorHandler.go" afterPath="$PROJECT_DIR$/src/coordinator/CoordinatorHandler.go" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/DissentClient.go" afterPath="$PROJECT_DIR$/src/DissentClient.go" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/util/Util.go" afterPath="$PROJECT_DIR$/src/util/Util.go" />
     </list>
     <ignored path="Anonymity.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -30,8 +32,8 @@
       <file leaf-file-name="ClientHandler.go" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/client/ClientHandler.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="21.666666">
-              <caret line="10" column="77" selection-start-line="10" selection-start-column="12" selection-end-line="10" selection-end-column="77" />
+            <state vertical-scroll-proportion="-11.111111">
+              <caret line="67" column="50" selection-start-line="67" selection-start-column="21" selection-end-line="67" selection-end-column="50" />
               <folding>
                 <element signature="e#15#87#0" expanded="true" />
               </folding>
@@ -55,7 +57,7 @@
         <entry file="file://$PROJECT_DIR$/src/coordinator/CoordinatorHandler.go">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="51" column="1" selection-start-line="51" selection-start-column="1" selection-end-line="51" selection-end-column="1" />
+              <caret line="60" column="32" selection-start-line="60" selection-start-column="32" selection-end-line="60" selection-end-column="32" />
               <folding>
                 <element signature="e#22#92#0" expanded="true" />
               </folding>
@@ -63,14 +65,13 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DissentClient.go" pinned="false" current-in-tab="false">
+      <file leaf-file-name="DissentClient.go" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/DissentClient.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-3.8888888">
-              <caret line="120" column="22" selection-start-line="120" selection-start-column="22" selection-end-line="120" selection-end-column="22" />
+            <state vertical-scroll-proportion="0.79710144">
+              <caret line="70" column="26" selection-start-line="70" selection-start-column="26" selection-end-line="70" selection-end-column="26" />
               <folding>
-                <element signature="n#!!block;n#sendMsg#0" expanded="false" />
-                <element signature="n#!!block;n#sendVote#0" expanded="false" />
+                <element signature="e#14#222#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -98,11 +99,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Coordinator.go" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Coordinator.go" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Coordinator.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.79710144">
-              <caret line="76" column="4" selection-start-line="76" selection-start-column="4" selection-end-line="76" selection-end-column="4" />
+            <state vertical-scroll-proportion="-12.0">
+              <caret line="54" column="12" selection-start-line="54" selection-start-column="12" selection-end-line="54" selection-end-column="12" />
               <folding>
                 <element signature="e#14#162#0" expanded="true" />
                 <element signature="n#!!block;n#startServerListener#0" expanded="false" />
@@ -110,6 +111,7 @@
                 <element signature="n#!!block;n#clearBuffer#0" expanded="false" />
                 <element signature="n#!!block;n#announce#0" expanded="false" />
                 <element signature="n#!!block;n#roundEnd#0" expanded="false" />
+                <element signature="n#!!block;n#main#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -129,7 +131,7 @@
         <entry file="file://$PROJECT_DIR$/src/util/Util.go">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="19" column="0" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
+              <caret line="28" column="21" selection-start-line="28" selection-start-column="21" selection-end-line="28" selection-end-column="21" />
               <folding>
                 <element signature="e#13#157#0" expanded="true" />
               </folding>
@@ -174,12 +176,12 @@
         <option value="$PROJECT_DIR$/src/util/Pair.go" />
         <option value="$PROJECT_DIR$/src/main.go" />
         <option value="$PROJECT_DIR$/src/client/ClientHandler.go" />
-        <option value="$PROJECT_DIR$/src/util/Util.go" />
         <option value="$PROJECT_DIR$/src/client/DissentClient.go" />
-        <option value="$PROJECT_DIR$/src/DissentClient.go" />
         <option value="$PROJECT_DIR$/src/coordinator/Coordinator.go" />
-        <option value="$PROJECT_DIR$/src/coordinator/CoordinatorHandler.go" />
         <option value="$PROJECT_DIR$/src/Coordinator.go" />
+        <option value="$PROJECT_DIR$/src/coordinator/CoordinatorHandler.go" />
+        <option value="$PROJECT_DIR$/src/util/Util.go" />
+        <option value="$PROJECT_DIR$/src/DissentClient.go" />
       </list>
     </option>
   </component>
@@ -344,7 +346,7 @@
       <recent name="$PROJECT_DIR$/src/client" />
     </key>
   </component>
-  <component name="RunManager" selected="Go Application.Build DissentClient.go and run">
+  <component name="RunManager" selected="Go Single File.go run DissentClient.go">
     <configuration default="false" name="Build Coordinator.go and run" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true">
       <module name="Anonymity" />
       <working_directory value="$PROJECT_DIR$" />
@@ -549,10 +551,10 @@
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Go Application.Build DissentClient.go and run" />
-        <item index="1" class="java.lang.String" itemvalue="Go Application.Build Coordinator.go and run" />
-        <item index="2" class="java.lang.String" itemvalue="Go Single File.go run Coordinator.go" />
-        <item index="3" class="java.lang.String" itemvalue="Go Single File.go run DissentClient.go" />
+        <item index="0" class="java.lang.String" itemvalue="Go Single File.go run DissentClient.go" />
+        <item index="1" class="java.lang.String" itemvalue="Go Single File.go run Coordinator.go" />
+        <item index="2" class="java.lang.String" itemvalue="Go Application.Build DissentClient.go and run" />
+        <item index="3" class="java.lang.String" itemvalue="Go Application.Build Coordinator.go and run" />
         <item index="4" class="java.lang.String" itemvalue="Go Application.Build main.go and run" />
       </list>
     </recent_temporary>
@@ -576,7 +578,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="52" y="22" width="1313" height="790" extended-state="0" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -592,7 +594,7 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.28245476" sideWeight="0.48407644" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.28245476" sideWeight="0.48407644" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32808024" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -660,8 +662,7 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="n#!!block;n#sendMsg#0" expanded="false" />
-            <element signature="n#!!block;n#sendVote#0" expanded="false" />
+            <element signature="e#14#222#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -695,6 +696,7 @@
             <element signature="n#!!block;n#clearBuffer#0" expanded="false" />
             <element signature="n#!!block;n#announce#0" expanded="false" />
             <element signature="n#!!block;n#roundEnd#0" expanded="false" />
+            <element signature="n#!!block;n#main#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -767,8 +769,7 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="56" column="48" selection-start-line="56" selection-start-column="48" selection-end-line="56" selection-end-column="48" />
           <folding>
-            <element signature="n#!!block;n#sendMsg#0" expanded="false" />
-            <element signature="n#!!block;n#sendVote#0" expanded="false" />
+            <element signature="e#14#222#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -777,6 +778,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="5" column="17" selection-start-line="5" selection-start-column="17" selection-end-line="5" selection-end-column="17" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -831,8 +833,7 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="37" column="23" selection-start-line="37" selection-start-column="23" selection-end-line="37" selection-end-column="23" />
           <folding>
-            <element signature="n#!!block;n#sendMsg#0" expanded="false" />
-            <element signature="n#!!block;n#sendVote#0" expanded="false" />
+            <element signature="e#14#222#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -848,6 +849,7 @@
             <element signature="n#!!block;n#clearBuffer#0" expanded="false" />
             <element signature="n#!!block;n#announce#0" expanded="false" />
             <element signature="n#!!block;n#roundEnd#0" expanded="false" />
+            <element signature="n#!!block;n#main#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -875,8 +877,7 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="37" column="23" selection-start-line="37" selection-start-column="23" selection-end-line="37" selection-end-column="23" />
           <folding>
-            <element signature="n#!!block;n#sendMsg#0" expanded="false" />
-            <element signature="n#!!block;n#sendVote#0" expanded="false" />
+            <element signature="e#14#222#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -892,6 +893,7 @@
             <element signature="n#!!block;n#clearBuffer#0" expanded="false" />
             <element signature="n#!!block;n#announce#0" expanded="false" />
             <element signature="n#!!block;n#roundEnd#0" expanded="false" />
+            <element signature="n#!!block;n#main#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -995,6 +997,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="5" column="17" selection-start-line="5" selection-start-column="17" selection-end-line="5" selection-end-column="17" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1024,16 +1027,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/util/Util.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="19" column="0" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
-          <folding>
-            <element signature="e#13#157#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/coordinator/CoordinatorStatus.go">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1050,16 +1043,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/client/ClientHandler.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="21.666666">
-          <caret line="10" column="77" selection-start-line="10" selection-start-column="12" selection-end-line="10" selection-end-column="77" />
-          <folding>
-            <element signature="e#15#87#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/coordinator/Coordinator.go">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1070,31 +1053,40 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/client/ClientHandler.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-11.111111">
+          <caret line="67" column="50" selection-start-line="67" selection-start-column="21" selection-end-line="67" selection-end-column="50" />
+          <folding>
+            <element signature="e#15#87#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/coordinator/CoordinatorHandler.go">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="51" column="1" selection-start-line="51" selection-start-column="1" selection-end-line="51" selection-end-column="1" />
+          <caret line="60" column="32" selection-start-line="60" selection-start-column="32" selection-end-line="60" selection-end-column="32" />
           <folding>
             <element signature="e#22#92#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/DissentClient.go">
+    <entry file="file://$PROJECT_DIR$/src/util/Util.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-3.8888888">
-          <caret line="120" column="22" selection-start-line="120" selection-start-column="22" selection-end-line="120" selection-end-column="22" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="28" column="21" selection-start-line="28" selection-start-column="21" selection-end-line="28" selection-end-column="21" />
           <folding>
-            <element signature="n#!!block;n#sendMsg#0" expanded="false" />
-            <element signature="n#!!block;n#sendVote#0" expanded="false" />
+            <element signature="e#13#157#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Coordinator.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.79710144">
-          <caret line="76" column="4" selection-start-line="76" selection-start-column="4" selection-end-line="76" selection-end-column="4" />
+        <state vertical-scroll-proportion="-12.0">
+          <caret line="54" column="12" selection-start-line="54" selection-start-column="12" selection-end-line="54" selection-end-column="12" />
           <folding>
             <element signature="e#14#162#0" expanded="true" />
             <element signature="n#!!block;n#startServerListener#0" expanded="false" />
@@ -1102,6 +1094,17 @@
             <element signature="n#!!block;n#clearBuffer#0" expanded="false" />
             <element signature="n#!!block;n#announce#0" expanded="false" />
             <element signature="n#!!block;n#roundEnd#0" expanded="false" />
+            <element signature="n#!!block;n#main#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/DissentClient.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.79710144">
+          <caret line="70" column="26" selection-start-line="70" selection-start-column="26" selection-end-line="70" selection-end-column="26" />
+          <folding>
+            <element signature="e#14#222#0" expanded="true" />
           </folding>
         </state>
       </provider>
