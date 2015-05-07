@@ -2,6 +2,9 @@ package coordinator
 import (
 	"github.com/dedis/crypto/abstract"
 	"net"
+	"bytes"
+	"encoding/binary"
+	"util"
 )
 
 type Coordinator struct {
@@ -28,7 +31,13 @@ type Coordinator struct {
 	Clients map[abstract.Point]*net.UDPAddr
 	// store reputation map
 	ReputationMap map[abstract.Point]abstract.Point
+	// we only add new clients at the beginning of each round
+	// store the new clients's one-time pseudo nym
+	NewClientsBuffer []abstract.Point
+	// msg log
+	MsgLog []abstract.Point
 
+	DecryptedReputationMap map[abstract.Point][]byte
 	/*
 	// message sender list
 	MsgSenderList list.List
@@ -69,7 +78,23 @@ func (c Coordinator) AddClient(key abstract.Point, val *net.UDPAddr) {
 	c.Clients[key] = val
 }
 
-// get first server in topology
+// add server into topology
 func (c Coordinator) AddServer(addr *net.UDPAddr){
 	c.ServerList = append(c.ServerList,addr)
 }
+
+// add msg log and return msg id
+func (c Coordinator) AddMsgLog(log abstract.Point) int{
+	c.MsgLog = append(c.MsgLog,log)
+	return len(c.MsgLog)
+}
+
+// get reputation
+func (c Coordinator) GetReputation(key abstract.Point) int{
+	byteRep := c.DecryptedReputationMap[key]
+	buf := bytes.NewBuffer(byteRep) // b is []byte
+	rep, err := binary.ReadVarint(buf)
+	util.CheckErr(err)
+	return rep
+}
+

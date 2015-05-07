@@ -39,6 +39,7 @@ func initCoordinator() {
 
 	anonCoordinator = &coordinator.Coordinator{ServerAddr,nil,make([]*net.UDPAddr,0),
 		coordinator.CONFIGURATION,suite,a,A,nil, make(map[abstract.Point]*net.UDPAddr),
+		make(map[abstract.Point]abstract.Point), make(map[abstract.Point]*net.UDPAddr),
 		make(map[abstract.Point]abstract.Point)}
 }
 

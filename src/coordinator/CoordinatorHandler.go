@@ -33,7 +33,7 @@ func Handle(buf []byte,addr *net.UDPAddr, tmpCoordinator *Coordinator, n int) {
 		handleClientRegisterServerSide();
 		break
 	case proto.MESSAGE:
-		handleMsg()
+		handleMsg(event.Params)
 		break
 	case proto.VOTE:
 		handleVote()
@@ -115,18 +115,86 @@ func handleClientRegisterControllerSide(params map[string]interface{}) {
 	}
 	event := &proto.Event{proto.CLIENT_REGISTER_SERVERSIDE,pm}
 	util.Send(anonCoordinator.Socket,firstServer,util.Encode(event))
-
 }
 
+// handle client register successful event
+func handleClientRegisterServerSide(params map[string]interface{}) {
+	// get public key from params (it's one-time nym actually)
+	var publicKey = anonCoordinator.Suite.Point()
+	bytePublicKey := params["public_key"].([]byte)
+	publicKey.UnmarshalBinary(bytePublicKey)
 
-func handleClientRegisterServerSide() {
+	var addrStr = params["addr"].(string)
+	addr,err := net.ResolveUDPAddr("udp",addrStr)
+	util.CheckErr(err)
+	pm := map[string]interface{}{}
+	event := &proto.Event{proto.CLIENT_REGISTER_SERVERSIDE,pm}
+	util.Send(anonCoordinator.Socket,addr,util.Encode(event))
 
+	// instead of sending new client to server, we will send it when finishing this round. Currently we just add it into buffer
+	anonCoordinator.NewClientsBuffer = append(anonCoordinator.NewClientsBuffer,publicKey)
 }
 
+// verify the msg and broadcast to clients
+func handleMsg(params map[string]interface{}) {
+	// get info from the request
+	text := params["text"].(string)
+	byteSig := params["signature"].([]byte)
+	nym := anonCoordinator.Suite.Point()
+	byteNym := params["nym"].([]byte)
+	err := nym.UnmarshalBinary(byteNym)
+	util.CheckErr(err)
+
+	fmt.Println("[debug] Receiving msg from " + srcAddr.String() + ": " + text)
+	// verify the identification of the client
+
+	byteText := []byte(text)
+	err = util.ElGamalVerify(anonCoordinator.Suite,byteText,nym,byteSig)
+	if err != nil {
+		fmt.Print("[note]** Fails to verify the message...")
+		return
+	}
+	// add msg log
+	msgID := anonCoordinator.AddMsgLog(nym)
+
+	// generate msg to clients
+	pm := map[string]interface{}{
+		"text" : text,
+		"nym" : params["nym"].([]byte),
+		"rep" : anonCoordinator.GetReputation(nym),
+		"msgID" : msgID,
+	}
+	event := &proto.Event{proto.MESSAGE,pm}
+
+	// send to all the clients
+	for _,val := range anonCoordinator.Clients {
+		util.Send(anonCoordinator.Socket,val,util.Encode(event))
+	}
 
 
-func handleMsg() {
 
+	BigInteger g = controller.getGenerator()
+	// print out debug info
+	System.out.println("[debug] Receiving msg from " + srcAddr + ":" + port + ": " + text);
+	// verify the identification of the client
+	try {
+		// hash the message
+		MessageDigest digest = MessageDigest.getInstance("SHA-256");
+	byte[] hash = digest.digest(text.getBytes("UTF-8"));
+	BigInteger data = new BigInteger(1, hash);
+	// verification
+	if (ElGamal.verify(nym, data, signature[0], signature[1], g, controller.getPrime())) {
+		// the client pass the verification, randomly pick a server and deal with it
+		// generate msg id
+		Integer msgID = controller.addMsgLog(nym);
+		eventMsg.add("msgID", msgID);
+		// randomly send it to a server
+		Random random = new Random();
+		List<Pair<InetAddress, Integer>> serverList = controller.getServerList();
+		int index = random.nextInt(serverList.size());
+		Pair<InetAddress, Integer> selectedServer = serverList.get(index);
+		Utilities.send(controller.getSocket(), Utilities.serialize(eventMsg), selectedServer.getKey(), selectedServer.getValue());
+	}
 }
 
 func handleVote() {
