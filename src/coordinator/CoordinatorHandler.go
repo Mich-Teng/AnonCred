@@ -13,6 +13,7 @@ import (
 
 var anonCoordinator *Coordinator
 var srcAddr *net.UDPAddr
+
 func Handle(buf []byte,addr *net.UDPAddr, tmpCoordinator *Coordinator, n int) {
 	// decode the whole message
 	anonCoordinator = tmpCoordinator

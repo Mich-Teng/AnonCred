@@ -24,7 +24,11 @@ type Coordinator struct {
 	// generator g
 	G abstract.Point
 
+	// store client address
 	Clients map[abstract.Point]*net.UDPAddr
+	// store reputation map
+	ReputationMap map[abstract.Point]abstract.Point
+
 	/*
 	// message sender list
 	MsgSenderList list.List

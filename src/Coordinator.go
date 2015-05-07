@@ -13,6 +13,7 @@ import (
 	"time"
 	"log"
 	"github.com/dedis/crypto/abstract"
+	"proto"
 )
 
 var anonCoordinator *coordinator.Coordinator
@@ -37,7 +38,8 @@ func initCoordinator() {
 	A := suite.Point().Mul(nil, a)
 
 	anonCoordinator = &coordinator.Coordinator{ServerAddr,nil,make([]*net.UDPAddr,0),
-		coordinator.CONFIGURATION,suite,a,A,nil, make(map[abstract.Point]*net.UDPAddr)}
+		coordinator.CONFIGURATION,suite,a,A,nil, make(map[abstract.Point]*net.UDPAddr),
+		make(map[abstract.Point]abstract.Point)}
 }
 
 // todo
@@ -45,10 +47,33 @@ func clearBuffer() {
 	// todo
 }
 
-// todo
+// send the announcement notification to first server
 func announce() {
-	// todo
+	firstServer := anonCoordinator.GetFirstServer()
+	if firstServer == nil {
+		anonCoordinator.Status = coordinator.MESSAGE
+		return
+	}
+	// construct reputation list (public & encrypted reputation)
+	size := len(anonCoordinator.ReputationMap)
+	keys := make([]abstract.Point,size)
+	vals := make([]abstract.Point,size)
+	i := 0
+	for k, v := range anonCoordinator.ReputationMap {
+		keys[i] = k
+		vals[i] = v
+		i++
+	}
+	byteKeys := util.ProtobufEncodePointList(keys)
+	byteVals := util.ProtobufEncodePointList(vals)
+	params := map[string]interface{}{
+		"keys" : byteKeys,
+		"vals" : byteVals,
+	}
+	event := &proto.Event{proto.ANNOUNCEMENT,params}
+	util.Send(anonCoordinator.Socket,firstServer,util.Encode(event))
 }
+
 
 // todo
 func roundEnd() {

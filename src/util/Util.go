@@ -10,6 +10,10 @@ import (
 	"os"
 	"net"
 	"encoding/gob"
+	"reflect"
+	"github.com/dedis/protobuf"
+	"github.com/dedis/crypto/nist"
+	"github.com/dedis/crypto/random"
 )
 
 func Encode(event interface{}) []byte {
@@ -37,6 +41,29 @@ func CheckErr(err error) {
 		log.Fatal("decode fails")
 		os.Exit(1)
 	}
+}
+
+func ProtobufEncodePointList(plist []abstract.Point) []byte {
+	byteNym, err := protobuf.Encode(&PointList{plist})
+	if err != nil {
+		log.Fatal(err)
+	}
+	return byteNym
+}
+
+func ProtobufDecodePointList(bytes []byte) []abstract.Point {
+	var aPoint abstract.Point
+	var tPoint = reflect.TypeOf(&aPoint).Elem()
+	suite := nist.NewAES128SHA256QR512()
+	cons := protobuf.Constructors {
+		tPoint: func()interface{} { return suite.Point() },
+	}
+
+	var msg PointList
+	if err := protobuf.DecodeWithConstructors(bytes, &msg, cons); err != nil {
+		log.Fatal(err)
+	}
+	return msg.Points
 }
 
 func ByteToInt(b []byte) int {
@@ -115,3 +142,27 @@ signatureBuffer []byte) error {
 
 	return nil
 }
+
+func ElGamalEncrypt(suite abstract.Suite, pubkey abstract.Point, message []byte) (
+K, C abstract.Point, remainder []byte) {
+
+	// Embed the message (or as much of it as will fit) into a curve point.
+	M, remainder := suite.Point().Pick(message, random.Stream)
+
+	// ElGamal-encrypt the point to produce ciphertext (K,C).
+	k := suite.Secret().Pick(random.Stream) // ephemeral private key
+	K = suite.Point().Mul(nil, k)           // ephemeral DH public key
+	S := suite.Point().Mul(pubkey, k)       // ephemeral DH shared secret
+	C = S.Add(S, M)                         // message blinded with secret
+	return
+}
+
+func ElGamalDecrypt(suite abstract.Suite, prikey abstract.Secret, K, C abstract.Point) (
+M abstract.Point) {
+
+	// ElGamal-decrypt the ciphertext (K,C) to reproduce the message.
+	S := suite.Point().Mul(K, prikey) // regenerate shared secret
+	M = suite.Point().Sub(C, S)      // use to un-blind the message
+	return
+}
+// get the final data by message, _ = M.data()
