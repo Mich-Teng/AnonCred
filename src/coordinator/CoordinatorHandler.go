@@ -11,6 +11,7 @@ import (
 	"util"
 	"strings"
 	"strconv"
+	"time"
 )
 
 var anonCoordinator *Coordinator
@@ -32,13 +33,13 @@ func Handle(buf []byte,addr *net.UDPAddr, tmpCoordinator *Coordinator, n int) {
 		handleClientRegisterControllerSide(event.Params,);
 		break
 	case proto.CLIENT_REGISTER_SERVERSIDE:
-		handleClientRegisterServerSide();
+		handleClientRegisterServerSide(event.Params);
 		break
 	case proto.MESSAGE:
 		handleMsg(event.Params)
 		break
 	case proto.VOTE:
-		handleVote()
+		handleVote(event.Params)
 		break
 	case proto.ROUND_END:
 		handleRoundEnd()
@@ -219,7 +220,16 @@ func handleVote(params map[string]interface{}) {
 	util.Send(anonCoordinator.Socket,srcAddr,util.Encode(event))
 }
 
+// Handler for ROUND_END event
+// send user round end notification
 func handleRoundEnd() {
-
+	// send user round-end message
+	pm := map[string]interface{}
+	event := &proto.Event{proto.ROUND_END,pm}
+	for _,val := range anonCoordinator.Clients {
+		util.Send(anonCoordinator.Socket,val,util.Encode(event))
+	}
+	time.Sleep(500 * time.Millisecond)
+	anonCoordinator.Status = READY_FOR_NEW_ROUND
 }
 

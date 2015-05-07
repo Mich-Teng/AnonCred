@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="274173ca-fb8a-403a-8e7d-c0780dacf585" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/coordinator/Coordinator.go" afterPath="$PROJECT_DIR$/src/coordinator/Coordinator.go" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/coordinator/CoordinatorHandler.go" afterPath="$PROJECT_DIR$/src/coordinator/CoordinatorHandler.go" />
     </list>
     <ignored path="Anonymity.iws" />
@@ -73,14 +72,16 @@
       <file leaf-file-name="CoordinatorHandler.go" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/coordinator/CoordinatorHandler.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.7209302">
-              <caret line="178" column="47" selection-start-line="178" selection-start-column="47" selection-end-line="178" selection-end-column="47" />
+            <state vertical-scroll-proportion="0.8604651">
+              <caret line="224" column="22" selection-start-line="224" selection-start-column="22" selection-end-line="224" selection-end-column="22" />
               <folding>
                 <element signature="n#!!block;n#handleAnnouncement#0" expanded="false" />
                 <element signature="n#!!block;n#handleServerRegister#0" expanded="false" />
                 <element signature="n#!!block;n#handleClientRegisterControllerSide#0" expanded="false" />
                 <element signature="n#!!block;n#handleClientRegisterServerSide#0" expanded="false" />
+                <element signature="n#!!block;n#handleMsg#0" expanded="false" />
                 <element signature="n#!!block;n#handleVote#0" expanded="false" />
+                <element signature="n#!!block;n#handleRoundEnd#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -732,7 +733,9 @@
             <element signature="n#!!block;n#handleServerRegister#0" expanded="false" />
             <element signature="n#!!block;n#handleClientRegisterControllerSide#0" expanded="false" />
             <element signature="n#!!block;n#handleClientRegisterServerSide#0" expanded="false" />
+            <element signature="n#!!block;n#handleMsg#0" expanded="false" />
             <element signature="n#!!block;n#handleVote#0" expanded="false" />
+            <element signature="n#!!block;n#handleRoundEnd#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1091,14 +1094,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/coordinator/CoordinatorHandler.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7209302">
-          <caret line="178" column="47" selection-start-line="178" selection-start-column="47" selection-end-line="178" selection-end-column="47" />
+        <state vertical-scroll-proportion="0.8604651">
+          <caret line="224" column="22" selection-start-line="224" selection-start-column="22" selection-end-line="224" selection-end-column="22" />
           <folding>
             <element signature="n#!!block;n#handleAnnouncement#0" expanded="false" />
             <element signature="n#!!block;n#handleServerRegister#0" expanded="false" />
             <element signature="n#!!block;n#handleClientRegisterControllerSide#0" expanded="false" />
             <element signature="n#!!block;n#handleClientRegisterServerSide#0" expanded="false" />
+            <element signature="n#!!block;n#handleMsg#0" expanded="false" />
             <element signature="n#!!block;n#handleVote#0" expanded="false" />
+            <element signature="n#!!block;n#handleRoundEnd#0" expanded="false" />
           </folding>
         </state>
       </provider>
