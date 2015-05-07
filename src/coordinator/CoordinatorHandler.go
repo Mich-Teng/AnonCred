@@ -11,9 +11,13 @@ import (
 	"util"
 )
 
-
-func Handle(buf []byte,addr *net.UDPAddr, anonCoordinator *Coordinator, n int) {
+var anonCoordinator *Coordinator
+var srcAddr *net.UDPAddr
+func Handle(buf []byte,addr *net.UDPAddr, tmpCoordinator *Coordinator, n int) {
 	// decode the whole message
+	anonCoordinator = tmpCoordinator
+	srcAddr = addr
+
 	event := &proto.Event{}
 	err := gob.NewDecoder(bytes.NewReader(buf[:n])).Decode(event)
 	util.CheckErr(err)
@@ -56,9 +60,19 @@ func handleServerRegister() {
 // Handler for REGISTER event
 // send the register request to server to do encryption
 func handleClientRegisterControllerSide(params map[string]interface{}) {
-	// add client to current map. Currently, we store this data in controller. However, we could
-	// randomly assign a server to deal with the client, which has a better load balance
-	fmt.Println("client register")
+	// get client's public key
+	publicKey := anonCoordinator.Suite.Point()
+	publicKey.UnmarshalBinary(params["public_key"].([]byte))
+	anonCoordinator.AddClient(publicKey,srcAddr)
+
+	// send register info to the first server
+//	firstServer := anonCoordinator.GetFirstServer()
+	pm := map[string]interface{}{
+		"public_key": params["public_key"],
+		"addr": srcAddr.String(),
+	}
+	event := &proto.Event{proto.CLIENT_REGISTER_SERVERSIDE,pm}
+	util.Send(anonCoordinator.Socket,srcAddr,util.Encode(event))
 
 }
 

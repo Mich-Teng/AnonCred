@@ -24,6 +24,7 @@ type Coordinator struct {
 	// generator g
 	G abstract.Point
 
+	Clients map[abstract.Point]*net.UDPAddr
 	/*
 	// message sender list
 	MsgSenderList list.List
@@ -40,4 +41,13 @@ type Coordinator struct {
 // get last server in topology
 func (c Coordinator) GetLastServer() *net.UDPAddr {
 	return c.ServerList[len(c.ServerList)-1]
+}
+
+// get first server in topology
+func (c Coordinator) GetFirstServer() *net.UDPAddr {
+	return c.ServerList[0]
+}
+
+func (c Coordinator) AddClient(key abstract.Point, val *net.UDPAddr) {
+	c.Clients[key] = val
 }

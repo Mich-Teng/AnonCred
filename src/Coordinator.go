@@ -12,6 +12,7 @@ import (
 	"github.com/dedis/crypto/random"
 	"time"
 	"log"
+	"github.com/dedis/crypto/abstract"
 )
 
 var anonCoordinator *coordinator.Coordinator
@@ -35,7 +36,8 @@ func initCoordinator() {
 	a := suite.Secret().Pick(random.Stream)
 	A := suite.Point().Mul(nil, a)
 
-	anonCoordinator = &coordinator.Coordinator{ServerAddr,nil,make([]*net.UDPAddr,2),coordinator.CONFIGURATION,suite,a,A,nil}
+	anonCoordinator = &coordinator.Coordinator{ServerAddr,nil,make([]*net.UDPAddr,2),
+		coordinator.CONFIGURATION,suite,a,A,nil, make(map[abstract.Point]*net.UDPAddr)}
 }
 
 // todo

@@ -27,13 +27,11 @@ func register() {
 	// set the parameters to register
 	bytePublicKey, _ := dissentClient.PublicKey.MarshalBinary()
 	params := map[string]interface{}{
-		"PublicKey": bytePublicKey,
+		"public_key": bytePublicKey,
 	}
 	event := &proto.Event{proto.CLIENT_REGISTER_CONTROLLERSIDE,params}
 
 	util.SendToCoodinator(dissentClient.Socket,util.Encode(event))
-
-
 }
 
 // start listener to listen port
