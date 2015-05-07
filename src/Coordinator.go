@@ -37,15 +37,18 @@ func initCoordinator() {
 	a := suite.Secret().Pick(random.Stream)
 	A := suite.Point().Mul(nil, a)
 
-	anonCoordinator = &coordinator.Coordinator{ServerAddr,nil,make([]*net.UDPAddr,0),
+	anonCoordinator = &coordinator.Coordinator{ServerAddr,nil,nil,
 		coordinator.CONFIGURATION,suite,a,A,nil, make(map[abstract.Point]*net.UDPAddr),
 		make(map[abstract.Point]abstract.Point), make(map[abstract.Point]*net.UDPAddr),
-		make(map[abstract.Point]abstract.Point)}
+		make(map[abstract.Point]abstract.Point), nil, nil, nil}
 }
 
-// todo
+
 func clearBuffer() {
-	// todo
+	// clear buffer
+	anonCoordinator.NewClientsBuffer = nil
+	// msg sender's record nym
+	anonCoordinator.MsgLog = nil
 }
 
 // send the announcement notification to first server
@@ -75,9 +78,35 @@ func announce() {
 	util.Send(anonCoordinator.Socket,firstServer,util.Encode(event))
 }
 
-
-// todo
+// send round end signal and data to last server
 func roundEnd() {
+	lastServer := anonCoordinator.GetLastServer()
+	if lastServer == nil {
+		anonCoordinator.Status = coordinator.READY_FOR_NEW_ROUND
+		return
+	}
+	// add new clients into reputation map
+	for _,nym := range anonCoordinator.NewClientsBuffer {
+		anonCoordinator.DecryptedReputationMap[nym] = 0
+	}
+	// construct the parameters
+	size := len(anonCoordinator.DecryptedReputationMap)
+	keys := make([]abstract.Point,size)
+	vals := make([]int,size)
+	i := 0
+	for k, v := range anonCoordinator.ReputationMap {
+		keys[i] = k
+		vals[i] = v
+		i++
+	}
+	byteKeys := util.ProtobufEncodePointList(keys)
+	// send signal to server
+	pm := map[string]interface{} {
+		"keys" : byteKeys,
+		"vals" : vals,
+	}
+	event := &proto.Event{proto.ROUND_END,pm}
+	util.Send(anonCoordinator.Socket,lastServer,util.Encode(event))
 }
 
 func main() {

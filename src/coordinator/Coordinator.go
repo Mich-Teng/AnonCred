@@ -38,16 +38,6 @@ type Coordinator struct {
 	MsgLog []abstract.Point
 
 	DecryptedReputationMap map[abstract.Point]int
-	/*
-	// message sender list
-	MsgSenderList list.List
-	// collect vote for this round
-	VoteCollect map[abstract.Point]int
-	// buffer for new clients joined during this round
-	NewClientBuffer list.List
-	// log info for all the votes
-	VoteLog list.List
-	*/
 
 }
 

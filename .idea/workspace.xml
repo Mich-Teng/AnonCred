@@ -2,6 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="274173ca-fb8a-403a-8e7d-c0780dacf585" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Coordinator.go" afterPath="$PROJECT_DIR$/src/Coordinator.go" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/coordinator/Coordinator.go" afterPath="$PROJECT_DIR$/src/coordinator/Coordinator.go" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/coordinator/CoordinatorHandler.go" afterPath="$PROJECT_DIR$/src/coordinator/CoordinatorHandler.go" />
     </list>
     <ignored path="Anonymity.iws" />
@@ -41,7 +43,7 @@
         <entry file="file://$PROJECT_DIR$/src/server/AnonServerHandler.go">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="37" column="4" selection-start-line="37" selection-start-column="4" selection-end-line="37" selection-end-column="36" />
+              <caret line="38" column="0" selection-start-line="38" selection-start-column="0" selection-end-line="39" selection-end-column="68" />
               <folding />
             </state>
           </provider>
@@ -63,17 +65,17 @@
         <entry file="file://$PROJECT_DIR$/src/coordinator/Coordinator.go">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="36" column="30" selection-start-line="36" selection-start-column="30" selection-end-line="36" selection-end-column="30" />
+              <caret line="35" column="29" selection-start-line="35" selection-start-column="29" selection-end-line="35" selection-end-column="29" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="CoordinatorHandler.go" pinned="false" current-in-tab="true">
+      <file leaf-file-name="CoordinatorHandler.go" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/coordinator/CoordinatorHandler.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.8604651">
-              <caret line="224" column="22" selection-start-line="224" selection-start-column="22" selection-end-line="224" selection-end-column="22" />
+            <state vertical-scroll-proportion="-15.0">
+              <caret line="237" column="0" selection-start-line="237" selection-start-column="0" selection-end-line="244" selection-end-column="48" />
               <folding>
                 <element signature="n#!!block;n#handleAnnouncement#0" expanded="false" />
                 <element signature="n#!!block;n#handleServerRegister#0" expanded="false" />
@@ -81,7 +83,6 @@
                 <element signature="n#!!block;n#handleClientRegisterServerSide#0" expanded="false" />
                 <element signature="n#!!block;n#handleMsg#0" expanded="false" />
                 <element signature="n#!!block;n#handleVote#0" expanded="false" />
-                <element signature="n#!!block;n#handleRoundEnd#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -114,23 +115,25 @@
         <entry file="file://$PROJECT_DIR$/src/AnonServerLauncher.go">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="20" column="0" selection-start-line="20" selection-start-column="0" selection-end-line="23" selection-end-column="63" />
+              <caret line="34" column="24" selection-start-line="34" selection-start-column="24" selection-end-line="34" selection-end-column="24" />
               <folding>
-                <element signature="e#13#191#0" expanded="true" />
                 <element signature="n#!!block;n#initAnonServer#0" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Coordinator.go" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Coordinator.go" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Coordinator.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="107" column="9" selection-start-line="107" selection-start-column="9" selection-end-line="107" selection-end-column="9" />
+            <state vertical-scroll-proportion="0.11160714">
+              <caret line="44" column="0" selection-start-line="44" selection-start-column="0" selection-end-line="44" selection-end-column="0" />
               <folding>
                 <element signature="n#!!block;n#startServerListener#0" expanded="false" />
+                <element signature="n#!!block;n#initCoordinator#0" expanded="false" />
                 <element signature="n#!!block;n#clearBuffer#0" expanded="false" />
+                <element signature="n#!!block;n#announce#0" expanded="false" />
+                <element signature="n#!!block;n#roundEnd#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -180,9 +183,9 @@
         <option value="$PROJECT_DIR$/src/util/Util.go" />
         <option value="$PROJECT_DIR$/src/server/AnonServer.go" />
         <option value="$PROJECT_DIR$/src/server/AnonServerHandler.go" />
-        <option value="$PROJECT_DIR$/src/Coordinator.go" />
         <option value="$PROJECT_DIR$/src/coordinator/Coordinator.go" />
         <option value="$PROJECT_DIR$/src/coordinator/CoordinatorHandler.go" />
+        <option value="$PROJECT_DIR$/src/Coordinator.go" />
       </list>
     </option>
   </component>
@@ -670,7 +673,10 @@
           <caret line="45" column="11" selection-start-line="45" selection-start-column="11" selection-end-line="45" selection-end-column="11" />
           <folding>
             <element signature="n#!!block;n#startServerListener#0" expanded="false" />
+            <element signature="n#!!block;n#initCoordinator#0" expanded="false" />
             <element signature="n#!!block;n#clearBuffer#0" expanded="false" />
+            <element signature="n#!!block;n#announce#0" expanded="false" />
+            <element signature="n#!!block;n#roundEnd#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -735,7 +741,6 @@
             <element signature="n#!!block;n#handleClientRegisterServerSide#0" expanded="false" />
             <element signature="n#!!block;n#handleMsg#0" expanded="false" />
             <element signature="n#!!block;n#handleVote#0" expanded="false" />
-            <element signature="n#!!block;n#handleRoundEnd#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -819,7 +824,10 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="n#!!block;n#startServerListener#0" expanded="false" />
+            <element signature="n#!!block;n#initCoordinator#0" expanded="false" />
             <element signature="n#!!block;n#clearBuffer#0" expanded="false" />
+            <element signature="n#!!block;n#announce#0" expanded="false" />
+            <element signature="n#!!block;n#roundEnd#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -859,7 +867,10 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="n#!!block;n#startServerListener#0" expanded="false" />
+            <element signature="n#!!block;n#initCoordinator#0" expanded="false" />
             <element signature="n#!!block;n#clearBuffer#0" expanded="false" />
+            <element signature="n#!!block;n#announce#0" expanded="false" />
+            <element signature="n#!!block;n#roundEnd#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1009,17 +1020,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/AnonServerLauncher.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="20" column="0" selection-start-line="20" selection-start-column="0" selection-end-line="23" selection-end-column="63" />
-          <folding>
-            <element signature="e#13#191#0" expanded="true" />
-            <element signature="n#!!block;n#initAnonServer#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/util/PointList.go">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1027,22 +1027,6 @@
           <folding>
             <element signature="e#13#54#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/AnonServer.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="27" column="6" selection-start-line="27" selection-start-column="6" selection-end-line="27" selection-end-column="6" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/AnonServerHandler.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="37" column="4" selection-start-line="37" selection-start-column="4" selection-end-line="37" selection-end-column="36" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1062,25 +1046,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Coordinator.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="107" column="9" selection-start-line="107" selection-start-column="9" selection-end-line="107" selection-end-column="9" />
-          <folding>
-            <element signature="n#!!block;n#startServerListener#0" expanded="false" />
-            <element signature="n#!!block;n#clearBuffer#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/coordinator/Coordinator.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="36" column="30" selection-start-line="36" selection-start-column="30" selection-end-line="36" selection-end-column="30" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/DissentClient.go">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1092,10 +1057,36 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/AnonServerLauncher.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="34" column="24" selection-start-line="34" selection-start-column="24" selection-end-line="34" selection-end-column="24" />
+          <folding>
+            <element signature="n#!!block;n#initAnonServer#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/AnonServer.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="27" column="6" selection-start-line="27" selection-start-column="6" selection-end-line="27" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/AnonServerHandler.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="38" column="0" selection-start-line="38" selection-start-column="0" selection-end-line="39" selection-end-column="68" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/coordinator/CoordinatorHandler.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.8604651">
-          <caret line="224" column="22" selection-start-line="224" selection-start-column="22" selection-end-line="224" selection-end-column="22" />
+        <state vertical-scroll-proportion="-15.0">
+          <caret line="237" column="0" selection-start-line="237" selection-start-column="0" selection-end-line="244" selection-end-column="48" />
           <folding>
             <element signature="n#!!block;n#handleAnnouncement#0" expanded="false" />
             <element signature="n#!!block;n#handleServerRegister#0" expanded="false" />
@@ -1103,7 +1094,28 @@
             <element signature="n#!!block;n#handleClientRegisterServerSide#0" expanded="false" />
             <element signature="n#!!block;n#handleMsg#0" expanded="false" />
             <element signature="n#!!block;n#handleVote#0" expanded="false" />
-            <element signature="n#!!block;n#handleRoundEnd#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/coordinator/Coordinator.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="35" column="29" selection-start-line="35" selection-start-column="29" selection-end-line="35" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Coordinator.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.11160714">
+          <caret line="44" column="0" selection-start-line="44" selection-start-column="0" selection-end-line="44" selection-end-column="0" />
+          <folding>
+            <element signature="n#!!block;n#startServerListener#0" expanded="false" />
+            <element signature="n#!!block;n#initCoordinator#0" expanded="false" />
+            <element signature="n#!!block;n#clearBuffer#0" expanded="false" />
+            <element signature="n#!!block;n#announce#0" expanded="false" />
+            <element signature="n#!!block;n#roundEnd#0" expanded="false" />
           </folding>
         </state>
       </provider>

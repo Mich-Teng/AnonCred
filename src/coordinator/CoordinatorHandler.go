@@ -12,6 +12,7 @@ import (
 	"strings"
 	"strconv"
 	"time"
+	"github.com/dedis/crypto/abstract"
 )
 
 var anonCoordinator *Coordinator
@@ -63,6 +64,17 @@ func handleAnnouncement(params map[string]interface{}) {
 	byteG := params["g"].([]byte)
 	err := g.UnmarshalBinary(byteG)
 	util.CheckErr(err)
+
+	//construct Decrypted reputation map
+	keyList := util.ProtobufDecodePointList(params["keys"].([]byte))
+	valList := util.ProtobufDecodePointList(params["vals"].([]byte))
+	anonCoordinator.DecryptedReputationMap = make(map[abstract.Point]int)
+	for i := 0; i < len(keyList); i++ {
+		byteVal, _ := valList[i].Data()
+		val := util.ByteToInt(byteVal)
+		anonCoordinator.DecryptedReputationMap[keyList[i]] = val
+	}
+
 	// distribute g and hash table of ids to user
 	pm := map[string]interface{}{
 		"g": params["g"].([]byte),
