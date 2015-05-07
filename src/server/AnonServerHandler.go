@@ -96,6 +96,9 @@ func handleRoundEnd(params map[string]interface{}) {
 		}
 		event := &proto.Event{proto.ROUND_END,pm}
 		util.Send(anonServer.Socket,anonServer.NextHop,util.Encode(event))
+		// reset RoundKey and key map
+		anonServer.Roundkey = anonServer.Suite.Secret().Pick(random.Stream)
+		anonServer.KeyMap = make(map[abstract.Point]abstract.Point)
 		return
 	}
 
@@ -230,8 +233,6 @@ func handleAnnouncement(params map[string]interface{}) {
 	}
 	event := &proto.Event{proto.ANNOUNCEMENT,pm}
 	util.Send(anonServer.Socket,anonServer.NextHop,util.Encode(event))
-
-	fmt.Println("announce!!")
 }
 
 // handle server register reply
