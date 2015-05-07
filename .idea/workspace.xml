@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="274173ca-fb8a-403a-8e7d-c0780dacf585" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Coordinator.go" afterPath="$PROJECT_DIR$/src/Coordinator.go" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/coordinator/Coordinator.go" afterPath="$PROJECT_DIR$/src/coordinator/Coordinator.go" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/coordinator/CoordinatorHandler.go" afterPath="$PROJECT_DIR$/src/coordinator/CoordinatorHandler.go" />
     </list>
@@ -65,7 +64,7 @@
         <entry file="file://$PROJECT_DIR$/src/coordinator/Coordinator.go">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="92" column="35" selection-start-line="92" selection-start-column="35" selection-end-line="92" selection-end-column="35" />
+              <caret line="36" column="30" selection-start-line="36" selection-start-column="30" selection-end-line="36" selection-end-column="30" />
               <folding />
             </state>
           </provider>
@@ -74,14 +73,14 @@
       <file leaf-file-name="CoordinatorHandler.go" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/coordinator/CoordinatorHandler.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-0.13953489">
-              <caret line="35" column="30" selection-start-line="35" selection-start-column="30" selection-end-line="35" selection-end-column="30" />
+            <state vertical-scroll-proportion="0.7209302">
+              <caret line="178" column="47" selection-start-line="178" selection-start-column="47" selection-end-line="178" selection-end-column="47" />
               <folding>
                 <element signature="n#!!block;n#handleAnnouncement#0" expanded="false" />
                 <element signature="n#!!block;n#handleServerRegister#0" expanded="false" />
                 <element signature="n#!!block;n#handleClientRegisterControllerSide#0" expanded="false" />
                 <element signature="n#!!block;n#handleClientRegisterServerSide#0" expanded="false" />
-                <element signature="n#!!block;n#handleMsg#0" expanded="false" />
+                <element signature="n#!!block;n#handleVote#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -95,7 +94,6 @@
               <folding>
                 <element signature="n#!!block;n#sendMsg#0" expanded="false" />
                 <element signature="n#!!block;n#sendVote#0" expanded="false" />
-                <element signature="n#!!block;n#main#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -734,7 +732,7 @@
             <element signature="n#!!block;n#handleServerRegister#0" expanded="false" />
             <element signature="n#!!block;n#handleClientRegisterControllerSide#0" expanded="false" />
             <element signature="n#!!block;n#handleClientRegisterServerSide#0" expanded="false" />
-            <element signature="n#!!block;n#handleMsg#0" expanded="false" />
+            <element signature="n#!!block;n#handleVote#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -746,7 +744,6 @@
           <folding>
             <element signature="n#!!block;n#sendMsg#0" expanded="false" />
             <element signature="n#!!block;n#sendVote#0" expanded="false" />
-            <element signature="n#!!block;n#main#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -809,7 +806,6 @@
           <folding>
             <element signature="n#!!block;n#sendMsg#0" expanded="false" />
             <element signature="n#!!block;n#sendVote#0" expanded="false" />
-            <element signature="n#!!block;n#main#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -850,7 +846,6 @@
           <folding>
             <element signature="n#!!block;n#sendMsg#0" expanded="false" />
             <element signature="n#!!block;n#sendVote#0" expanded="false" />
-            <element signature="n#!!block;n#main#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -991,6 +986,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="4" column="24" selection-start-line="4" selection-start-column="24" selection-end-line="4" selection-end-column="24" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1047,18 +1043,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/DissentClient.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="58" column="65" selection-start-line="58" selection-start-column="65" selection-end-line="58" selection-end-column="65" />
-          <folding>
-            <element signature="n#!!block;n#sendMsg#0" expanded="false" />
-            <element signature="n#!!block;n#sendVote#0" expanded="false" />
-            <element signature="n#!!block;n#main#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/util/Util.go">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1089,21 +1073,32 @@
     <entry file="file://$PROJECT_DIR$/src/coordinator/Coordinator.go">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="92" column="35" selection-start-line="92" selection-start-column="35" selection-end-line="92" selection-end-column="35" />
+          <caret line="36" column="30" selection-start-line="36" selection-start-column="30" selection-end-line="36" selection-end-column="30" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/DissentClient.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="58" column="65" selection-start-line="58" selection-start-column="65" selection-end-line="58" selection-end-column="65" />
+          <folding>
+            <element signature="n#!!block;n#sendMsg#0" expanded="false" />
+            <element signature="n#!!block;n#sendVote#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/coordinator/CoordinatorHandler.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.13953489">
-          <caret line="35" column="30" selection-start-line="35" selection-start-column="30" selection-end-line="35" selection-end-column="30" />
+        <state vertical-scroll-proportion="0.7209302">
+          <caret line="178" column="47" selection-start-line="178" selection-start-column="47" selection-end-line="178" selection-end-column="47" />
           <folding>
             <element signature="n#!!block;n#handleAnnouncement#0" expanded="false" />
             <element signature="n#!!block;n#handleServerRegister#0" expanded="false" />
             <element signature="n#!!block;n#handleClientRegisterControllerSide#0" expanded="false" />
             <element signature="n#!!block;n#handleClientRegisterServerSide#0" expanded="false" />
-            <element signature="n#!!block;n#handleMsg#0" expanded="false" />
+            <element signature="n#!!block;n#handleVote#0" expanded="false" />
           </folding>
         </state>
       </provider>

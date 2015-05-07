@@ -9,6 +9,8 @@ import (
 
 	"bytes"
 	"util"
+	"strings"
+	"strconv"
 )
 
 var anonCoordinator *Coordinator
@@ -171,34 +173,50 @@ func handleMsg(params map[string]interface{}) {
 		util.Send(anonCoordinator.Socket,val,util.Encode(event))
 	}
 
-
-
-	BigInteger g = controller.getGenerator()
-	// print out debug info
-	System.out.println("[debug] Receiving msg from " + srcAddr + ":" + port + ": " + text);
-	// verify the identification of the client
-	try {
-		// hash the message
-		MessageDigest digest = MessageDigest.getInstance("SHA-256");
-	byte[] hash = digest.digest(text.getBytes("UTF-8"));
-	BigInteger data = new BigInteger(1, hash);
-	// verification
-	if (ElGamal.verify(nym, data, signature[0], signature[1], g, controller.getPrime())) {
-		// the client pass the verification, randomly pick a server and deal with it
-		// generate msg id
-		Integer msgID = controller.addMsgLog(nym);
-		eventMsg.add("msgID", msgID);
-		// randomly send it to a server
-		Random random = new Random();
-		List<Pair<InetAddress, Integer>> serverList = controller.getServerList();
-		int index = random.nextInt(serverList.size());
-		Pair<InetAddress, Integer> selectedServer = serverList.get(index);
-		Utilities.send(controller.getSocket(), Utilities.serialize(eventMsg), selectedServer.getKey(), selectedServer.getValue());
-	}
 }
 
-func handleVote() {
+// verify the vote and reply to client
+func handleVote(params map[string]interface{}) {
+	// get info from the request
+	text := params["text"].(string)
+	byteSig := params["signature"].([]byte)
+	nym := anonCoordinator.Suite.Point()
+	byteNym := params["nym"].([]byte)
+	err := nym.UnmarshalBinary(byteNym)
+	util.CheckErr(err)
 
+	fmt.Println("[debug] Receiving vote from " + srcAddr.String() + ": " + text)
+	// verify the identification of the client
+
+	byteText := []byte(text)
+	err = util.ElGamalVerify(anonCoordinator.Suite,byteText,nym,byteSig)
+	var pm map[string]interface{}
+	if err != nil {
+		fmt.Print("[note]** Fails to verify the vote...")
+		pm = map[string]interface{}{
+			"reply" : false,
+		}
+		return
+	}else {
+		// avoid duplicate vote
+		// todo
+
+		// get msg id and vote
+		commands := strings.Split(text,";")
+		// modify the reputation
+		msgID, _ := strconv.Atoi(commands[0])
+		vote, _ := strconv.Atoi(commands[1])
+		targetNym := anonCoordinator.MsgLog[msgID-1]
+		anonCoordinator.DecryptedReputationMap[targetNym] = anonCoordinator.DecryptedReputationMap[targetNym] + vote
+		// generate reply msg to client
+		pm = map[string]interface{}{
+			"reply" : true,
+		}
+	}
+
+	event := &proto.Event{proto.VOTE_REPLY,pm}
+	// send reply to the client
+	util.Send(anonCoordinator.Socket,srcAddr,util.Encode(event))
 }
 
 func handleRoundEnd() {

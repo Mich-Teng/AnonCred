@@ -34,10 +34,10 @@ type Coordinator struct {
 	// we only add new clients at the beginning of each round
 	// store the new clients's one-time pseudo nym
 	NewClientsBuffer []abstract.Point
-	// msg log
+	// msg sender's record nym
 	MsgLog []abstract.Point
 
-	DecryptedReputationMap map[abstract.Point][]byte
+	DecryptedReputationMap map[abstract.Point]int
 	/*
 	// message sender list
 	MsgSenderList list.List
@@ -91,10 +91,6 @@ func (c Coordinator) AddMsgLog(log abstract.Point) int{
 
 // get reputation
 func (c Coordinator) GetReputation(key abstract.Point) int{
-	byteRep := c.DecryptedReputationMap[key]
-	buf := bytes.NewBuffer(byteRep) // b is []byte
-	rep, err := binary.ReadVarint(buf)
-	util.CheckErr(err)
-	return rep
+	return c.DecryptedReputationMap[key]
 }
 
