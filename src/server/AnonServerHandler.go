@@ -77,7 +77,6 @@ func handleRoundEnd(params map[string]interface{}) {
 		}
 	}
 
-
 	size := len(keyList)
 	newKeys := make([]abstract.Point,size)
 	newVals := make([]abstract.Point,size)

@@ -1,13 +1,8 @@
 package main
 import (
+
+	"util"
 	"fmt"
-	"github.com/dedis/crypto/nist"
-	"github.com/dedis/crypto/random"
-	"github.com/dedis/protobuf"
-//	"github.com/dedis/crypto/abstract"
-//	"reflect"
-	"reflect"
-	"github.com/dedis/crypto/abstract"
 )
 type Message struct {
 	Nym     map[string][]byte
@@ -15,6 +10,11 @@ type Message struct {
 
 
 func main() {
+	var a int = 0
+	arr := util.IntToByte(a)
+	aw := util.ByteToInt(arr)
+	fmt.Println(aw)
+	/*
 	var aSecret abstract.Secret
 	var tSecret = reflect.TypeOf(&aSecret).Elem()
 
@@ -46,4 +46,5 @@ func main() {
 	}
 	fmt.Println(msg.Nym["a"])
 	fmt.Println(msg.Nym["b"])
+	*/
 }

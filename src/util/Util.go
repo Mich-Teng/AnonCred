@@ -38,7 +38,7 @@ func SendToCoodinator(conn *net.UDPConn, content []byte) {
 
 func CheckErr(err error) {
 	if err != nil {
-		log.Fatal("decode fails")
+		panic(err.Error())
 		os.Exit(1)
 	}
 }
@@ -46,7 +46,7 @@ func CheckErr(err error) {
 func ProtobufEncodePointList(plist []abstract.Point) []byte {
 	byteNym, err := protobuf.Encode(&PointList{plist})
 	if err != nil {
-		log.Fatal(err)
+		panic(err.Error())
 	}
 	return byteNym
 }
@@ -73,10 +73,9 @@ func ByteToInt(b []byte) int {
 }
 
 func IntToByte(n int) []byte {
-	buf := new(bytes.Buffer)
-	err := binary.Write(buf, binary.LittleEndian, n)
-	CheckErr(err)
-	return buf.Bytes()
+	buf := make([]byte, 4)
+	binary.LittleEndian.PutUint32(buf,uint32(n))
+	return buf
 }
 
 // crypto

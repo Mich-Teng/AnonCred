@@ -3,8 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="274173ca-fb8a-403a-8e7d-c0780dacf585" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/server/AnonServerHandler.go" afterPath="$PROJECT_DIR$/src/server/AnonServerHandler.go" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/client/ClientHandler.go" afterPath="$PROJECT_DIR$/src/client/ClientHandler.go" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/coordinator/CoordinatorHandler.go" afterPath="$PROJECT_DIR$/src/coordinator/CoordinatorHandler.go" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/util/Util.go" afterPath="$PROJECT_DIR$/src/util/Util.go" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main.go" afterPath="$PROJECT_DIR$/src/main.go" />
     </list>
     <ignored path="Anonymity.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -29,11 +29,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="ClientHandler.go" pinned="false" current-in-tab="true">
+      <file leaf-file-name="ClientHandler.go" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/client/ClientHandler.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.7629797">
-              <caret line="40" column="0" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="38" column="0" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -43,7 +43,7 @@
         <entry file="file://$PROJECT_DIR$/src/server/AnonServerHandler.go">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="134" column="23" selection-start-line="134" selection-start-column="23" selection-end-line="134" selection-end-column="23" />
+              <caret line="58" column="43" selection-start-line="58" selection-start-column="43" selection-end-line="58" selection-end-column="43" />
               <folding>
                 <element signature="e#15#219#0" expanded="true" />
               </folding>
@@ -93,16 +93,6 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DissentClient.go" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/client/DissentClient.go">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="20" column="1" selection-start-line="20" selection-start-column="1" selection-end-line="20" selection-end-column="1" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="AnonServerLauncher.go" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/AnonServerLauncher.go">
           <provider selected="true" editor-type-id="text-editor">
@@ -126,11 +116,23 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="main.go" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.50790066">
+              <caret line="15" column="19" selection-start-line="15" selection-start-column="19" selection-end-line="15" selection-end-column="19" />
+              <folding>
+                <element signature="e#13#39#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="Util.go" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/util/Util.go">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="78" column="17" selection-start-line="78" selection-start-column="17" selection-end-line="78" selection-end-column="17" />
+              <caret line="76" column="47" selection-start-line="76" selection-start-column="47" selection-end-line="76" selection-end-column="47" />
               <folding />
             </state>
           </provider>
@@ -161,18 +163,18 @@
         <option value="$PROJECT_DIR$/src/coordinator/CoordinatorStatus.go" />
         <option value="$PROJECT_DIR$/src/coordinator/Topology.go" />
         <option value="$PROJECT_DIR$/src/util/Pair.go" />
-        <option value="$PROJECT_DIR$/src/main.go" />
         <option value="$PROJECT_DIR$/src/client/DissentClient.go" />
         <option value="$PROJECT_DIR$/src/DissentClient.go" />
         <option value="$PROJECT_DIR$/src/util/PointList.go" />
         <option value="$PROJECT_DIR$/src/server/AnonServer.go" />
-        <option value="$PROJECT_DIR$/src/util/Util.go" />
         <option value="$PROJECT_DIR$/src/AnonServerLauncher.go" />
         <option value="$PROJECT_DIR$/src/coordinator/Coordinator.go" />
         <option value="$PROJECT_DIR$/src/Coordinator.go" />
-        <option value="$PROJECT_DIR$/src/server/AnonServerHandler.go" />
         <option value="$PROJECT_DIR$/src/coordinator/CoordinatorHandler.go" />
         <option value="$PROJECT_DIR$/src/client/ClientHandler.go" />
+        <option value="$PROJECT_DIR$/src/server/AnonServerHandler.go" />
+        <option value="$PROJECT_DIR$/src/main.go" />
+        <option value="$PROJECT_DIR$/src/util/Util.go" />
       </list>
     </option>
   </component>
@@ -355,13 +357,7 @@
       <recent name="$PROJECT_DIR$/src/client" />
     </key>
   </component>
-  <component name="RunManager" selected="Go Single File.go run Coordinator.go">
-    <configuration default="false" name="Build Coordinator.go and run" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true">
-      <module name="Anonymity" />
-      <working_directory value="$PROJECT_DIR$" />
-      <file_path value="$PROJECT_DIR$/src/Coordinator.go" />
-      <method />
-    </configuration>
+  <component name="RunManager" selected="Go Single File.go run main.go">
     <configuration default="false" name="Build DissentClient.go and run" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true">
       <module name="Anonymity" />
       <working_directory value="$PROJECT_DIR$" />
@@ -384,6 +380,12 @@
       <module name="Anonymity" />
       <working_directory value="$PROJECT_DIR$" />
       <file_path value="$PROJECT_DIR$/src/AnonServerLauncher.go" />
+      <method />
+    </configuration>
+    <configuration default="false" name="go run main.go" type="GoRunFileConfiguration" factoryName="Go Single File" temporary="true">
+      <module name="Anonymity" />
+      <working_directory value="$PROJECT_DIR$" />
+      <file_path value="$PROJECT_DIR$/src/main.go" />
       <method />
     </configuration>
     <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">
@@ -552,19 +554,19 @@
       <method />
     </configuration>
     <list size="5">
-      <item index="0" class="java.lang.String" itemvalue="Go Application.Build Coordinator.go and run" />
-      <item index="1" class="java.lang.String" itemvalue="Go Application.Build DissentClient.go and run" />
-      <item index="2" class="java.lang.String" itemvalue="Go Single File.go run Coordinator.go" />
-      <item index="3" class="java.lang.String" itemvalue="Go Single File.go run DissentClient.go" />
-      <item index="4" class="java.lang.String" itemvalue="Go Single File.go run AnonServerLauncher.go" />
+      <item index="0" class="java.lang.String" itemvalue="Go Application.Build DissentClient.go and run" />
+      <item index="1" class="java.lang.String" itemvalue="Go Single File.go run Coordinator.go" />
+      <item index="2" class="java.lang.String" itemvalue="Go Single File.go run DissentClient.go" />
+      <item index="3" class="java.lang.String" itemvalue="Go Single File.go run AnonServerLauncher.go" />
+      <item index="4" class="java.lang.String" itemvalue="Go Single File.go run main.go" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Go Single File.go run Coordinator.go" />
-        <item index="1" class="java.lang.String" itemvalue="Go Single File.go run DissentClient.go" />
-        <item index="2" class="java.lang.String" itemvalue="Go Application.Build Coordinator.go and run" />
-        <item index="3" class="java.lang.String" itemvalue="Go Single File.go run AnonServerLauncher.go" />
-        <item index="4" class="java.lang.String" itemvalue="Go Application.Build DissentClient.go and run" />
+        <item index="0" class="java.lang.String" itemvalue="Go Single File.go run main.go" />
+        <item index="1" class="java.lang.String" itemvalue="Go Single File.go run AnonServerLauncher.go" />
+        <item index="2" class="java.lang.String" itemvalue="Go Application.Build DissentClient.go and run" />
+        <item index="3" class="java.lang.String" itemvalue="Go Single File.go run Coordinator.go" />
+        <item index="4" class="java.lang.String" itemvalue="Go Single File.go run DissentClient.go" />
       </list>
     </recent_temporary>
     <configuration name="&lt;template&gt;" type="WebApp" default="true" selected="false">
@@ -587,13 +589,14 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="52" y="22" width="1313" height="790" extended-state="0" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33954155" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32857144" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
@@ -604,10 +607,9 @@
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.30999213" sideWeight="0.48407644" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32714286" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32714286" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32871014" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -627,7 +629,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="3" />
+      <option name="time" value="5" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -649,7 +651,7 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="34" column="18" selection-start-line="34" selection-start-column="18" selection-end-line="34" selection-end-column="18" />
           <folding>
-            <element signature="e#13#223#0" expanded="false" />
+            <element signature="e#13#39#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -953,16 +955,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="34" column="18" selection-start-line="34" selection-start-column="18" selection-end-line="34" selection-end-column="18" />
-          <folding>
-            <element signature="e#13#223#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/coordinator/CoordinatorStatus.go">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1008,48 +1000,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/util/Util.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="78" column="17" selection-start-line="78" selection-start-column="17" selection-end-line="78" selection-end-column="17" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/AnonServerLauncher.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="47" column="42" selection-start-line="47" selection-start-column="42" selection-end-line="47" selection-end-column="42" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Coordinator.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="108" column="28" selection-start-line="108" selection-start-column="28" selection-end-line="108" selection-end-column="28" />
-          <folding>
-            <element signature="n#!!block;n#clearBuffer#0" expanded="false" />
-            <element signature="n#!!block;n#announce#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/server/AnonServer.go">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="23" column="22" selection-start-line="23" selection-start-column="22" selection-end-line="23" selection-end-column="22" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/AnonServerHandler.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="134" column="23" selection-start-line="134" selection-start-column="23" selection-end-line="134" selection-end-column="23" />
-          <folding>
-            <element signature="e#15#219#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1081,9 +1036,56 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/client/ClientHandler.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7629797">
-          <caret line="40" column="0" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="38" column="0" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/AnonServerLauncher.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="47" column="42" selection-start-line="47" selection-start-column="42" selection-end-line="47" selection-end-column="42" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/AnonServerHandler.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="58" column="43" selection-start-line="58" selection-start-column="43" selection-end-line="58" selection-end-column="43" />
+          <folding>
+            <element signature="e#15#219#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Coordinator.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="108" column="28" selection-start-line="108" selection-start-column="28" selection-end-line="108" selection-end-column="28" />
+          <folding>
+            <element signature="n#!!block;n#clearBuffer#0" expanded="false" />
+            <element signature="n#!!block;n#announce#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/util/Util.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="76" column="47" selection-start-line="76" selection-start-column="47" selection-end-line="76" selection-end-column="47" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.50790066">
+          <caret line="15" column="19" selection-start-line="15" selection-start-column="19" selection-end-line="15" selection-end-column="19" />
+          <folding>
+            <element signature="e#13#39#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
