@@ -36,7 +36,7 @@ func initCoordinator() {
 	a := suite.Secret().Pick(random.Stream)
 	A := suite.Point().Mul(nil, a)
 
-	anonCoordinator = &coordinator.Coordinator{ServerAddr,nil,make([]*net.UDPAddr,2),
+	anonCoordinator = &coordinator.Coordinator{ServerAddr,nil,make([]*net.UDPAddr,0),
 		coordinator.CONFIGURATION,suite,a,A,nil, make(map[abstract.Point]*net.UDPAddr)}
 }
 

@@ -40,14 +40,32 @@ type Coordinator struct {
 
 // get last server in topology
 func (c Coordinator) GetLastServer() *net.UDPAddr {
+	if len(c.ServerList) == 0 {
+		return nil
+	}
 	return c.ServerList[len(c.ServerList)-1]
 }
 
 // get first server in topology
 func (c Coordinator) GetFirstServer() *net.UDPAddr {
+	if len(c.ServerList) == 0 {
+		return nil
+	}
 	return c.ServerList[0]
 }
 
 func (c Coordinator) AddClient(key abstract.Point, val *net.UDPAddr) {
+	// delete the client who has same ip address
+	for k,v := range c.Clients {
+		if v.String() == val.String() {
+			delete(c.Clients,k)
+			break
+		}
+	}
 	c.Clients[key] = val
+}
+
+// get first server in topology
+func (c Coordinator) AddServer(addr *net.UDPAddr){
+	c.ServerList = append(c.ServerList,addr)
 }
