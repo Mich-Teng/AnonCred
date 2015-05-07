@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"../util"
 	"bytes"
+	"strconv"
 )
 
 func Handle(buf []byte,addr *net.UDPAddr, dissentClient *DissentClient, n int) {
@@ -97,8 +98,7 @@ func handleAnnouncement(params map[string]interface{}, dissentClient *DissentCli
 func handleMsg(params map[string]interface{}, dissentClient *DissentClient) {
 
 	// get the reputation
-	byteRep := params["rep"].([]byte)
-	rep := util.ByteToInt(byteRep)
+	rep := params["rep"].(int)
 	// get One-time pseudonym
 	byteNym := params["nym"].([]byte)
 	nym := dissentClient.Suite.Point()
@@ -106,12 +106,12 @@ func handleMsg(params map[string]interface{}, dissentClient *DissentClient) {
 	// get msg text
 	text := params["text"].(string)
 	// get msg id
-	msgID := params["msgID"].(string)
+	msgID := params["msgID"].(int)
 	// print out in client side
 	fmt.Print("Message from ")
 	fmt.Print(nym)
-	fmt.Println(" (reputation: " + string(rep) + ")");
-	fmt.Println("Message ID: " + string(msgID));
+	fmt.Println(" (reputation: " + strconv.Itoa(rep) + ")");
+	fmt.Println("Message ID: " + strconv.Itoa(msgID));
 	fmt.Println(text);
 	fmt.Println();
 

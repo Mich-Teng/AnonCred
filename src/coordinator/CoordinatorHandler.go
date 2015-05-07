@@ -174,7 +174,7 @@ func handleMsg(params map[string]interface{}) {
 	// verify the identification of the client
 
 	byteText := []byte(text)
-	err = util.ElGamalVerify(anonCoordinator.Suite,byteText,nym,byteSig)
+	err = util.ElGamalVerify(anonCoordinator.Suite,byteText,nym,byteSig,anonCoordinator.G)
 	if err != nil {
 		fmt.Print("[note]** Fails to verify the message...")
 		return
@@ -212,7 +212,7 @@ func handleVote(params map[string]interface{}) {
 	// verify the identification of the client
 
 	byteText := []byte(text)
-	err = util.ElGamalVerify(anonCoordinator.Suite,byteText,nym,byteSig)
+	err = util.ElGamalVerify(anonCoordinator.Suite,byteText,nym,byteSig, anonCoordinator.G)
 	var pm map[string]interface{}
 	if err != nil {
 		fmt.Print("[note]** Fails to verify the vote...")

@@ -111,6 +111,19 @@ func roundEnd() {
 	anonCoordinator.Status = coordinator.READY_FOR_NEW_ROUND
 }
 
+/**
+ * start vote phase, actually, if we partition the clients to servers,
+ * we can let server send this signal to clients. Here, for simplicity, we
+ * just send it from controller
+ */
+func vote() {
+	pm := map[string]interface{} {}
+	event := &proto.Event{proto.VOTE,pm}
+	for _, val :=  range anonCoordinator.Clients {
+		util.Send(anonCoordinator.Socket, val, util.Encode(event))
+	}
+}
+
 func main() {
 	// init coordinator
 	initCoordinator()
@@ -161,6 +174,7 @@ func main() {
 		fmt.Println("[coordinator] Messaging phase started...")
 		// 10 secs for msg
 		time.Sleep(10000 * time.Millisecond)
+		vote()
 		fmt.Println("[controller] Voting phase started...")
 		// 10 secs for vote
 		time.Sleep(10000 * time.Millisecond)

@@ -122,7 +122,7 @@ privateKey abstract.Secret, g abstract.Point) []byte {
 }
 
 func ElGamalVerify(suite abstract.Suite, message []byte, publicKey abstract.Point,
-signatureBuffer []byte) error {
+signatureBuffer []byte, g abstract.Point) error {
 
 	// Decode the signature
 	buf := bytes.NewBuffer(signatureBuffer)
@@ -137,7 +137,7 @@ signatureBuffer []byte) error {
 	var P, T abstract.Point
 	P = suite.Point()
 	T = suite.Point()
-	T.Add(T.Mul(nil, r), P.Mul(publicKey, c))
+	T.Add(T.Mul(g, r), P.Mul(publicKey, c))
 
 	// Verify that the hash based on the message and T
 	// matches the challange c from the signature
