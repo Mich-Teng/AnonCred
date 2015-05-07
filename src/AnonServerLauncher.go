@@ -74,7 +74,7 @@ func main() {
 		log.Fatal("Fails to connect to coordinator")
 		os.Exit(1)
 	}
-
+	fmt.Println("[debug] Register success...")
 	for {
 		time.Sleep(100000000 * time.Millisecond)
 	}
