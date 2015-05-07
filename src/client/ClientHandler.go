@@ -61,7 +61,6 @@ func handleVotePhaseStart(dissentClient *DissentClient) {
 func handleRoundEnd(dissentClient *DissentClient) {
 	dissentClient.Status = CONNECTED
 	fmt.Println("[client] Round ended. Waiting for new round start...");
-	fmt.Println("Please wait for the next round to start");
 }
 
 // handle vote reply

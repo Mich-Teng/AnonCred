@@ -46,14 +46,10 @@ func Handle(buf []byte,addr *net.UDPAddr, tmpServer *AnonServer, n int) {
 
 func handleRoundEnd(params map[string]interface{}) {
 	keyList := util.ProtobufDecodePointList(params["keys"].([]byte))
-	if(len(keyList) == 0) {
-		// do nothing, just send the package to next server if the client list is empty
-		event := &proto.Event{proto.ROUND_END,params}
-		util.Send(anonServer.Socket,anonServer.NextHop,util.Encode(event))
-		return
-	}
-	var byteValList [][]byte
-	if _, ok := params["start"]; ok {
+	size := len(keyList)
+
+	var byteValList = make([][]byte, size)
+	if _, ok := params["no_shuffle"]; ok {
 		valList := params["vals"].([]int)
 		// contains start, sent by coordinator
 		for i := 0; i < len(valList); i++ {
@@ -77,7 +73,7 @@ func handleRoundEnd(params map[string]interface{}) {
 		}
 	}
 
-	size := len(keyList)
+
 	newKeys := make([]abstract.Point,size)
 	newVals := make([]abstract.Point,size)
 	for i := 0 ; i < len(keyList); i++ {
@@ -87,6 +83,20 @@ func handleRoundEnd(params map[string]interface{}) {
 		K,C,_ := util.ElGamalEncrypt(anonServer.Suite,anonServer.PublicKey,byteValList[i])
 		newVals[i] = C
 		anonServer.A = K
+	}
+	byteNewKeys := util.ProtobufEncodePointList(newKeys)
+	byteNewVals := util.ProtobufEncodePointList(newVals)
+
+	if(size <= 1) {
+		// no need to shuffle, just send the package to next server
+		pm := map[string]interface{}{
+			"keys" : byteNewKeys,
+			"vals" : byteNewVals,
+			"no_shuffle" : true,
+		}
+		event := &proto.Event{proto.ROUND_END,pm}
+		util.Send(anonServer.Socket,anonServer.NextHop,util.Encode(event))
+		return
 	}
 
 	// *** perform neff shuffle here ***
@@ -98,8 +108,7 @@ func handleRoundEnd(params map[string]interface{}) {
 	// send data to the next server
 	byteXbar := util.ProtobufEncodePointList(Xbar)
 	byteYbar := util.ProtobufEncodePointList(Ybar)
-	byteNewKeys := util.ProtobufEncodePointList(newKeys)
-	byteNewVals := util.ProtobufEncodePointList(newVals)
+
 	// prev keys means the key before shuffle
 	pm := map[string]interface{}{
 		"keys" : byteXbar,
@@ -143,35 +152,35 @@ func handleUpdateNextHop(params map[string]interface{}) {
 }
 
 func handleAnnouncement(params map[string]interface{}) {
-	var g = anonServer.Suite.Point()
+	var g abstract.Point = nil
 	keyList := util.ProtobufDecodePointList(params["keys"].([]byte))
 	valList := util.ProtobufDecodePointList(params["vals"].([]byte))
-	if(len(keyList) == 0) {
-		// do nothing, just send the package to next server if the client list is empty
-		event := &proto.Event{proto.ANNOUNCEMENT,params}
-		util.Send(anonServer.Socket,anonServer.NextHop,util.Encode(event))
-		return
-	}
+	size := len(keyList)
+
 	if val, ok := params["g"]; ok {
 		// contains g
 		byteG := val.([]byte)
+		g = anonServer.Suite.Point()
 		g.UnmarshalBinary(byteG)
+		g = anonServer.Suite.Point().Mul(g,anonServer.Roundkey)
 		// verify the previous shuffle
 		// get the key list before shuffle
-		prevKeyList := 	util.ProtobufDecodePointList(params["prev_keys"].([]byte))
-		prevValList := util.ProtobufDecodePointList(params["prev_vals"].([]byte))
-		verifier := shuffle.Verifier(anonServer.Suite, nil, anonServer.PublicKey, prevKeyList,
-			prevValList, keyList, valList)
-		err := proof.HashVerify(anonServer.Suite, "PairShuffle", verifier, params["proof"].([]byte))
-		if err != nil {
-			panic("Shuffle verify failed: " + err.Error())
+		if _, shuffled := params["shuffle"]; shuffled {
+			prevKeyList := 	util.ProtobufDecodePointList(params["prev_keys"].([]byte))
+			prevValList := util.ProtobufDecodePointList(params["prev_vals"].([]byte))
+			verifier := shuffle.Verifier(anonServer.Suite, nil, anonServer.PublicKey, prevKeyList,
+				prevValList, keyList, valList)
+			err := proof.HashVerify(anonServer.Suite, "PairShuffle", verifier, params["proof"].([]byte))
+			if err != nil {
+				panic("Shuffle verify failed: " + err.Error())
+			}
 		}
+	}else {
+		g = anonServer.Suite.Point().Mul(nil,anonServer.Roundkey)
 	}
 
-	// encrypt g by modPow
-	g = g.Mul(g,anonServer.Roundkey)
 
-	size := len(keyList)
+
 	newKeys := make([]abstract.Point,size)
 	newVals := make([]abstract.Point,size)
 	for i := 0 ; i < len(keyList); i++ {
@@ -181,6 +190,22 @@ func handleAnnouncement(params map[string]interface{}) {
 		newVals[i] = util.ElGamalDecrypt(anonServer.Suite, anonServer.PrivateKey, anonServer.A, valList[i])
 		// update key map
 		anonServer.KeyMap[newKeys[i]] = keyList[i]
+	}
+	byteNewKeys := util.ProtobufEncodePointList(newKeys)
+	byteNewVals := util.ProtobufEncodePointList(newVals)
+	byteG, err := g.MarshalBinary()
+	util.CheckErr(err)
+
+	if(size <= 1) {
+		// no need to shuffle, just send the package to next server
+		pm := map[string]interface{}{
+			"keys" : byteNewKeys,
+			"vals" : byteNewVals,
+			"g" : byteG,
+		}
+		event := &proto.Event{proto.ANNOUNCEMENT,pm}
+		util.Send(anonServer.Socket,anonServer.NextHop,util.Encode(event))
+		return
 	}
 
 	// *** perform neff shuffle here ***
@@ -192,9 +217,7 @@ func handleAnnouncement(params map[string]interface{}) {
 	// send data to the next server
 	byteXbar := util.ProtobufEncodePointList(Xbar)
 	byteYbar := util.ProtobufEncodePointList(Ybar)
-	byteNewKeys := util.ProtobufEncodePointList(newKeys)
-	byteNewVals := util.ProtobufEncodePointList(newVals)
-	byteG, _ := g.MarshalBinary()
+
 	// prev keys means the key before shuffle
 	pm := map[string]interface{}{
 		"keys" : byteXbar,
@@ -203,9 +226,12 @@ func handleAnnouncement(params map[string]interface{}) {
 		"proof" : prf,
 		"prev_keys": byteNewKeys,
 		"prev_vals": byteNewVals,
+		"shuffle": true,
 	}
 	event := &proto.Event{proto.ANNOUNCEMENT,pm}
 	util.Send(anonServer.Socket,anonServer.NextHop,util.Encode(event))
+
+	fmt.Println("announce!!")
 }
 
 // handle server register reply
