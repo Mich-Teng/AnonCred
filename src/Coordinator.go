@@ -4,11 +4,7 @@ import (
 
 	"net"
 	"fmt"
-	"log"
-	"./proto"
 	"./util"
-	"encoding/gob"
-	"bytes"
 	"./coordinator"
 	"bufio"
 	"os"
@@ -24,19 +20,11 @@ func startServerListener() {
 	for {
 		n,addr,err := anonCoordinator.Socket.ReadFromUDP(buf)
 		util.CheckErr(err)
-		//coordinator.Handle(buf,addr,dissentClient,n) // a goroutine handles conn so that the loop can accept other connections
-		event := &proto.Event{}
-		err = gob.NewDecoder(bytes.NewReader(buf[:n])).Decode(event)
-		if err != nil {
-			log.Fatal(err)
-		}
-		fmt.Println(event)
-
-		util.Send(anonCoordinator.Socket,addr,util.Encode(event))
-
+		coordinator.Handle(buf,addr,anonCoordinator,n)
 	}
 }
 
+// initialize coordinator
 func initCoordinator() {
 	ServerAddr,err := net.ResolveUDPAddr("udp",":10001")
 	util.CheckErr(err)
