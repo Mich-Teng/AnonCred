@@ -88,7 +88,7 @@ func handleAnnouncement(params map[string]interface{}, dissentClient *DissentCli
 
 	// print out the msg to suggest user to send msg or vote
 	fmt.Println("[client] One-Time pseudonym for this round is ");
-	fmt.Println("");
+	fmt.Println(nym);
 	fmt.Println("*** [client] Message Phase begins. Sending msg using the format... ***");
 	fmt.Println("msg <msg_text>");
 }

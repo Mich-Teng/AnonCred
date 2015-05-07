@@ -85,6 +85,7 @@ func roundEnd() {
 		return
 	}
 	// add new clients into reputation map
+
 	for _,nym := range anonCoordinator.NewClientsBuffer {
 		anonCoordinator.DecryptedReputationMap[nym] = 0
 	}

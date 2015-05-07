@@ -83,3 +83,7 @@ func (c *Coordinator) GetReputation(key abstract.Point) int{
 	return c.DecryptedReputationMap[key]
 }
 
+func (c *Coordinator) AddClientInBuffer(nym abstract.Point) {
+	c.NewClientsBuffer = append(c.NewClientsBuffer, nym)
+}
+

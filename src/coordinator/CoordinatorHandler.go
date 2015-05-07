@@ -157,7 +157,7 @@ func handleClientRegisterServerSide(params map[string]interface{}) {
 	util.Send(anonCoordinator.Socket,addr,util.Encode(event))
 
 	// instead of sending new client to server, we will send it when finishing this round. Currently we just add it into buffer
-	anonCoordinator.NewClientsBuffer = append(anonCoordinator.NewClientsBuffer,publicKey)
+	anonCoordinator.AddClientInBuffer(publicKey)
 }
 
 // verify the msg and broadcast to clients

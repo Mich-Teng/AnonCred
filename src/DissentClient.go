@@ -11,7 +11,6 @@ import (
 	"github.com/dedis/crypto/nist"
 	"github.com/dedis/crypto/random"
 
-	"github.com/dedis/protobuf"
 	"bufio"
 	"os"
 	"strings"
@@ -58,7 +57,7 @@ func sendSigRequest(text string, eventType int) {
 	rand := dissentClient.Suite.Cipher([]byte("example"))
 	sig := util.ElGamalSign(dissentClient.Suite,rand,[]byte(text),dissentClient.PrivateKey,dissentClient.G)
 	// serialize Point data structure
-	byteNym, _ := protobuf.Encode(dissentClient.OnetimePseudoNym)
+	byteNym, _ := dissentClient.OnetimePseudoNym.MarshalBinary()
 	// wrap params
 	params := map[string]interface{}{
 		"text": text,
