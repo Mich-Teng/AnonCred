@@ -39,6 +39,8 @@ type Coordinator struct {
 
 	DecryptedReputationMap map[abstract.Point]int
 
+
+
 }
 
 // get last server in topology

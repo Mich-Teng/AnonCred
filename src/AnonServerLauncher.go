@@ -32,7 +32,7 @@ func startAnonServerListener() {
 		if err != nil {
 			log.Fatal(err)
 		}
-		server.Handle(buf,addr,anonServer,n) // a goroutine handles conn so that the loop can accept other connections
+		server.Handle(buf,addr,anonServer,n)
 	}
 }
 
@@ -44,8 +44,10 @@ func initAnonServer() {
 	suite := nist.NewAES128SHA256QR512()
 	a := suite.Secret().Pick(random.Stream)
 	A := suite.Point().Mul(nil, a)
+	RoundKey, err := suite.Secret().Pick(random.Stream)
+	util.CheckErr(err)
 	anonServer = &server.AnonServer{ServerAddr,nil,suite,a,A,suite.Point(),nil,
-	false,nil,nil,make(map[abstract.Point]abstract.Point),nil}
+	false,nil,nil,make(map[abstract.Point]abstract.Point),nil,RoundKey}
 }
 
 func main() {

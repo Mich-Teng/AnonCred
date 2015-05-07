@@ -72,6 +72,13 @@ func ByteToInt(b []byte) int {
 	return int(myInt)
 }
 
+func IntToByte(n int) []byte {
+	buf := new(bytes.Buffer)
+	err := binary.Write(buf, binary.LittleEndian, n)
+	CheckErr(err)
+	return buf.Bytes()
+}
+
 // crypto
 
 // A basic, verifiable signature

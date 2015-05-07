@@ -104,6 +104,7 @@ func roundEnd() {
 	pm := map[string]interface{} {
 		"keys" : byteKeys,
 		"vals" : vals,
+		"start" : true,
 	}
 	event := &proto.Event{proto.ROUND_END,pm}
 	util.Send(anonCoordinator.Socket,lastServer,util.Encode(event))
