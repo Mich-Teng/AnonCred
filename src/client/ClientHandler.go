@@ -66,7 +66,7 @@ func handleRoundEnd(dissentClient *DissentClient) {
 
 // handle vote reply
 func handleVoteReply(params map[string]interface{}) {
-	status := params["staus"].(bool)
+	status := params["reply"].(bool)
 	if status == true {
 		fmt.Println("Vote success!");
 	}else {
