@@ -13,11 +13,22 @@ import (
 	"github.com/dedis/protobuf"
 	"github.com/dedis/crypto/nist"
 
+	"github.com/dedis/crypto/random"
 )
+
+func SerializeTwoDimensionArray(arr [][]byte) []ByteArray{
+	byteArr := make([]ByteArray,len(arr))
+	gob.Register(byteArr)
+	for i := 0; i < len(arr); i++ {
+		byteArr[i].Arr = arr[i]
+	}
+	return byteArr
+}
 
 func Encode(event interface{}) []byte {
 	var network bytes.Buffer
-	gob.NewEncoder(&network).Encode(event)
+	err := gob.NewEncoder(&network).Encode(event)
+	CheckErr(err)
 	return network.Bytes()
 }
 
@@ -148,12 +159,12 @@ signatureBuffer []byte, g abstract.Point) error {
 	return nil
 }
 
-/*
-func ElGamalEncrypt(suite abstract.Suite, pubkey abstract.Point, message []byte) (
+
+func ElGamalEncrypt(suite abstract.Suite, pubkey abstract.Point, M abstract.Point) (
 K, C abstract.Point, remainder []byte) {
 
 	// Embed the message (or as much of it as will fit) into a curve point.
-	M, remainder := suite.Point().Pick(message, random.Stream)
+	//M, remainder := suite.Point().Pick(message, random.Stream)
 
 	// ElGamal-encrypt the point to produce ciphertext (K,C).
 	k := suite.Secret().Pick(random.Stream) // ephemeral private key
@@ -171,5 +182,6 @@ M abstract.Point) {
 	M = suite.Point().Sub(C, S)      // use to un-blind the message
 	return
 }
-*/
+
+
 // get the final data by message, _ = M.data()

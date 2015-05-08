@@ -39,7 +39,7 @@ func initCoordinator() {
 
 	anonCoordinator = &coordinator.Coordinator{ServerAddr,nil,nil,
 		coordinator.CONFIGURATION,suite,a,A,nil, make(map[string]*net.UDPAddr),
-		make(map[string]abstract.Point), make(map[string]abstract.Point), nil, nil,
+		make(map[string]abstract.Point), make(map[string][]byte), nil, nil,
 		make(map[string]int),make(map[string]abstract.Point)}
 }
 
@@ -61,7 +61,7 @@ func announce() {
 	// construct reputation list (public & encrypted reputation)
 	size := len(anonCoordinator.ReputationMap)
 	keys := make([]abstract.Point,size)
-	vals := make([]abstract.Point,size)
+	vals := make([][]byte,size)
 	i := 0
 	for k, v := range anonCoordinator.ReputationMap {
 		keys[i] = anonCoordinator.ReputationKeyMap[k]
@@ -69,7 +69,7 @@ func announce() {
 		i++
 	}
 	byteKeys := util.ProtobufEncodePointList(keys)
-	byteVals := util.ProtobufEncodePointList(vals)
+	byteVals := util.SerializeTwoDimensionArray(vals)
 	params := map[string]interface{}{
 		"keys" : byteKeys,
 		"vals" : byteVals,

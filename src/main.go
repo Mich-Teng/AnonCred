@@ -1,15 +1,16 @@
 package main
 import (
 
+
 	"fmt"
 	"util"
-	"github.com/dedis/crypto/nist"
-	"github.com/dedis/crypto/abstract"
-	"github.com/dedis/crypto/anon"
-	"github.com/dedis/crypto/random"
+
+	"proto"
+	"encoding/gob"
+	"bytes"
 )
 type Message struct {
-	Nym     map[string][]byte
+	Nym     []byte
 }
 
 
@@ -40,7 +41,39 @@ func main() {
 	_,_,qdata := util.ElGamalEncrypt(suite1,publicKey,data)
 	fmt.Println(qdata)
 	*/
+	var a int = 1
+	aBytes := util.IntToByte(a)
+	arr := make([]Message,2)
+	gob.Register(arr)
+	arr[0].Nym = aBytes
+	arr[1].Nym = aBytes
+	pm := map[string]interface{}{
+		"keys" : arr,
+	}
+	event := &proto.Event{proto.ROUND_END,pm}
+	data := util.Encode(event)
+	newEvent := &proto.Event{}
+	err := gob.NewDecoder(bytes.NewReader(data)).Decode(newEvent)
+	util.CheckErr(err)
+	fmt.Println((newEvent.Params["keys"].([]Message))[0])
 
+	/*
+	suite := nist.NewAES128SHA256QR512()
+	key := suite.Secret().Pick(random.Stream)
+	publicKey := suite.Point().Mul(nil,key)
+	var a int = 0
+	s := make([]abstract.Point,2)
+	s[0] = nist.NewResidueGroup().NewPoint(int64(a))
+	fmt.Println(s[0].String())
+
+	K,C,_ := util.ElGamalEncrypt(suite,publicKey,s[0])
+	K1,C1,_ := util.ElGamalEncrypt(suite,publicKey,C)
+	P1 := util.ElGamalDecrypt(suite, key, K1, C1)
+	P := util.ElGamalDecrypt(suite, key, K, P1)
+	//_,_,qdata := util.ElGamalEncrypt(suite,publicKey,data)
+	fmt.Println(P)
+	*/
+	/*
 	suite := nist.NewAES128SHA256QR512()
 	rand := suite.Cipher([]byte("example"))
 
@@ -82,6 +115,7 @@ suite.
 	}
 
 	fmt.Println(util.ByteToInt(MF))
+	*/
 
 	/*
 	suite1 := nist.NewAES128SHA256QR512()

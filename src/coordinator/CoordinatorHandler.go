@@ -8,7 +8,7 @@ import (
 	"fmt"
 
 	"bytes"
-	"util"
+	"../util"
 	"strings"
 	"strconv"
 	"time"
@@ -72,15 +72,12 @@ func handleAnnouncement(params map[string]interface{}) {
 
 	//construct Decrypted reputation map
 	keyList := util.ProtobufDecodePointList(params["keys"].([]byte))
-	valList := util.ProtobufDecodePointList(params["vals"].([]byte))
+	valList := params["vals"].([]util.ByteArray)
 	anonCoordinator.DecryptedReputationMap = make(map[string]int)
 	anonCoordinator.DecryptedKeysMap = make(map[string]abstract.Point)
 
 	for i := 0; i < len(keyList); i++ {
-		byteVal, _ := valList[i].Data()
-		fmt.Println(byteVal == nil)
-
-		val := util.ByteToInt(byteVal)
+		val := util.ByteToInt(valList[i].Arr)
 		anonCoordinator.AddIntoDecryptedMap(keyList[i],val)
 	}
 
@@ -261,11 +258,11 @@ func handleVote(params map[string]interface{}) {
 func handleRoundEnd(params map[string]interface{}) {
 	// review reputation map
 	keyList := util.ProtobufDecodePointList(params["keys"].([]byte))
-	valList := util.ProtobufDecodePointList(params["vals"].([]byte))
-	anonCoordinator.ReputationMap = make(map[string]abstract.Point)
+	valList := params["vals"].([]util.ByteArray)
+	anonCoordinator.ReputationMap = make(map[string][]byte)
 	anonCoordinator.ReputationKeyMap = make(map[string]abstract.Point)
 	for i := 0; i < len(keyList); i++ {
-		anonCoordinator.ReputationMap[keyList[i].String()] = valList[i]
+		anonCoordinator.ReputationMap[keyList[i].String()] = valList[i].Arr
 		anonCoordinator.ReputationKeyMap[keyList[i].String()] = keyList[i]
 	}
 	fmt.Print("handle round end. Entry in reputation map: ")

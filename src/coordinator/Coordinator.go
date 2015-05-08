@@ -28,7 +28,7 @@ type Coordinator struct {
 	Clients map[string]*net.UDPAddr
 	// store reputation map
 	ReputationKeyMap map[string]abstract.Point
-	ReputationMap map[string]abstract.Point
+	ReputationMap map[string][]byte
 	// we only add new clients at the beginning of each round
 	// store the new clients's one-time pseudo nym
 	NewClientsBuffer []abstract.Point
@@ -95,7 +95,7 @@ func (c *Coordinator) AddIntoDecryptedMap(key abstract.Point, val int) {
 	c.DecryptedReputationMap[keyStr] = val
 }
 
-func (c *Coordinator) AddIntoRepMap(key abstract.Point, val abstract.Point) {
+func (c *Coordinator) AddIntoRepMap(key abstract.Point, val []byte) {
 	keyStr := key.String()
 	c.ReputationKeyMap[keyStr] = key
 	c.ReputationMap[keyStr] = val

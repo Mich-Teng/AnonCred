@@ -10,6 +10,7 @@ import (
 	"github.com/dedis/crypto/shuffle"
 	"github.com/dedis/crypto/proof"
 	"github.com/dedis/crypto/random"
+	"github.com/dedis/crypto/anon"
 )
 
 var srcAddr *net.UDPAddr
@@ -17,6 +18,9 @@ var anonServer *AnonServer
 
 func Handle(buf []byte,addr *net.UDPAddr, tmpServer *AnonServer, n int) {
 	// decode the whole message
+	byteArr := make([]util.ByteArray,2)
+	gob.Register(byteArr)
+
 	srcAddr = addr
 	anonServer = tmpServer
 	event := &proto.Event{}
@@ -48,54 +52,57 @@ func handleRoundEnd(params map[string]interface{}) {
 	keyList := util.ProtobufDecodePointList(params["keys"].([]byte))
 	size := len(keyList)
 	fmt.Println(size)
-	var byteValList = make([][]byte, size)
+	byteValList := make([][]byte,size)
 	if _, ok := params["is_start"]; ok {
-		valList := params["vals"].([]int)
+		intValList := params["vals"].([]int)
 		// contains start, sent by coordinator
-		for i := 0; i < len(valList); i++ {
-			byteValList[i] = util.IntToByte(valList[i])
+		for i := 0; i < len(intValList); i++ {
+			fmt.Println("handle round end: convert val list")
+			fmt.Println(int64(intValList[i]))
+			byteValList[i] = util.IntToByte(intValList[i])
 		}
 	} else {
 		// sent by server
 		// verify the previous shuffle
-		valList := util.ProtobufDecodePointList(params["vals"].([]byte))
+
 		if _, shuffled := params["shuffled"]; shuffled {
 			prevKeyList := util.ProtobufDecodePointList(params["prev_keys"].([]byte))
 			prevValList := util.ProtobufDecodePointList(params["prev_vals"].([]byte))
 			verifier := shuffle.Verifier(anonServer.Suite, nil, anonServer.PublicKey, prevKeyList,
-				prevValList, keyList, valList)
+				prevValList, keyList, keyList)
 			err := proof.HashVerify(anonServer.Suite, "PairShuffle", verifier, params["proof"].([]byte))
 			if err != nil {
 				panic("Shuffle verify failed: " + err.Error())
 			}
 		}
-		// construct byte Val list
-		for i:=0; i < len(valList); i++ {
-			byteValList[i], _ = valList[i].Data()
+		byteArr := params["vals"].([]util.ByteArray)
+		for i := 0; i < len(byteArr); i++ {
+			byteValList[i] = byteArr[i].Arr
 		}
 	}
 
+	rand1 := anonServer.Suite.Cipher([]byte("example"))
+	// Create a public/private keypair (X[mine],x)
+	X := make([]abstract.Point, 1)
+	X[0] = anonServer.PublicKey
+
 
 	newKeys := make([]abstract.Point,size)
-	newVals := make([]abstract.Point,size)
+	newVals := make([][]byte,size)
 	for i := 0 ; i < len(keyList); i++ {
 		// decrypt the public key
 		newKeys[i] = anonServer.KeyMap[keyList[i].String()]
-		fmt.Println("keymap: ")
-		fmt.Println(anonServer.KeyMap)
-		fmt.Println("key: ")
-		fmt.Println(keyList[i])
-		fmt.Println(newKeys[i])
 		// encrypt the reputation using ElGamal algorithm
-		K,C,_ := util.ElGamalEncrypt(anonServer.Suite,anonServer.PublicKey,byteValList[i])
-		fmt.Println("[handle round end]elgamal decrypt data : ")
-		fmt.Println(len(byteValList[i]))
-		fmt.Println(byteValList[i])
+		C := anon.Encrypt(anonServer.Suite, rand1, byteValList[i], anon.Set(X), false)
+		fmt.Println("[handle round end]elgamal encrypt data : ")
+	//	fmt.Println(valList[i])
 		newVals[i] = C
-		anonServer.A = K
+	//	anonServer.A = K
 	}
 	byteNewKeys := util.ProtobufEncodePointList(newKeys)
-	byteNewVals := util.ProtobufEncodePointList(newVals)
+
+	// type is []ByteArr
+	byteNewVals := util.SerializeTwoDimensionArray(newVals)
 
 	if(size <= 1) {
 		// no need to shuffle, just send the package to next server
@@ -115,7 +122,7 @@ func handleRoundEnd(params map[string]interface{}) {
 	// *** perform neff shuffle here ***
 	rand := anonServer.Suite.Cipher(abstract.RandomKey)
 	Xbar, Ybar, prover := shuffle.Shuffle(anonServer.Suite, nil, anonServer.PublicKey,
-		newKeys, newVals, rand)
+		newKeys, newKeys, rand)
 	prf, err := proof.HashProve(anonServer.Suite, "PairShuffle", rand, prover)
 	util.CheckErr(err)
 	// send data to the next server
@@ -168,7 +175,7 @@ func handleUpdateNextHop(params map[string]interface{}) {
 func handleAnnouncement(params map[string]interface{}) {
 	var g abstract.Point = nil
 	keyList := util.ProtobufDecodePointList(params["keys"].([]byte))
-	valList := util.ProtobufDecodePointList(params["vals"].([]byte))
+	valList := params["vals"].([]util.ByteArray)
 	size := len(keyList)
 
 	if val, ok := params["g"]; ok {
@@ -183,7 +190,7 @@ func handleAnnouncement(params map[string]interface{}) {
 			prevKeyList := 	util.ProtobufDecodePointList(params["prev_keys"].([]byte))
 			prevValList := util.ProtobufDecodePointList(params["prev_vals"].([]byte))
 			verifier := shuffle.Verifier(anonServer.Suite, nil, anonServer.PublicKey, prevKeyList,
-				prevValList, keyList, valList)
+				prevValList, keyList, keyList)
 			err := proof.HashVerify(anonServer.Suite, "PairShuffle", verifier, params["proof"].([]byte))
 			if err != nil {
 				panic("Shuffle verify failed: " + err.Error())
@@ -193,22 +200,24 @@ func handleAnnouncement(params map[string]interface{}) {
 		g = anonServer.Suite.Point().Mul(nil,anonServer.Roundkey)
 	}
 
-
+	X1 := make([]abstract.Point, 1)
+	X1[0] = anonServer.PublicKey
 
 	newKeys := make([]abstract.Point,size)
-	newVals := make([]abstract.Point,size)
+	newVals := make([][]byte,size)
 	for i := 0 ; i < len(keyList); i++ {
 		// encrypt the public key using modPow
 		newKeys[i] = anonServer.Suite.Point().Mul(keyList[i],anonServer.Roundkey)
 		// decrypt the reputation using ElGamal algorithm
-		newVals[i] = util.ElGamalDecrypt(anonServer.Suite, anonServer.PrivateKey, anonServer.A, valList[i])
-		fmt.Println("[handle announcement]elgamal decrypt data : ")
-		fmt.Println(valList[i].Data())
+		MM, err := anon.Decrypt(anonServer.Suite,valList[i].Arr , anon.Set(X1), 0, anonServer.PrivateKey, false)
+		util.CheckErr(err)
+		newVals[i] = MM
 		// update key map
 		anonServer.KeyMap[newKeys[i].String()] = keyList[i]
 	}
 	byteNewKeys := util.ProtobufEncodePointList(newKeys)
-	byteNewVals := util.ProtobufEncodePointList(newVals)
+	// []ByteArr
+	byteNewVals := util.SerializeTwoDimensionArray(newVals)
 	byteG, err := g.MarshalBinary()
 	util.CheckErr(err)
 
@@ -227,7 +236,7 @@ func handleAnnouncement(params map[string]interface{}) {
 	// *** perform neff shuffle here ***
 	rand := anonServer.Suite.Cipher(abstract.RandomKey)
 	Xbar, Ybar, prover := shuffle.Shuffle(anonServer.Suite, nil, anonServer.PublicKey,
-		newKeys, newVals, rand)
+		newKeys, newKeys, rand)
 	prf, err := proof.HashProve(anonServer.Suite, "PairShuffle", rand, prover)
 	util.CheckErr(err)
 	// send data to the next server
