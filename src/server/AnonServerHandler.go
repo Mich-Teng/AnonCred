@@ -7,7 +7,7 @@ import (
 	"util"
 	"fmt"
 	"github.com/dedis/crypto/abstract"
-	"github.com/dedis/crypto/shuffle"
+	"../github.com/dedis/crypto/shuffle"
 	"github.com/dedis/crypto/proof"
 	"github.com/dedis/crypto/random"
 	"github.com/dedis/crypto/anon"
@@ -48,6 +48,7 @@ func Handle(buf []byte,addr *net.UDPAddr, tmpServer *AnonServer, n int) {
 	}
 }
 
+
 func handleRoundEnd(params map[string]interface{}) {
 	keyList := util.ProtobufDecodePointList(params["keys"].([]byte))
 	size := len(keyList)
@@ -66,14 +67,19 @@ func handleRoundEnd(params map[string]interface{}) {
 		// verify the previous shuffle
 
 		if _, shuffled := params["shuffled"]; shuffled {
+			xbarList := util.ProtobufDecodePointList(params["xbar"].([]byte))
+			ybarList := util.ProtobufDecodePointList(params["ybar"].([]byte))
 			prevKeyList := util.ProtobufDecodePointList(params["prev_keys"].([]byte))
 			prevValList := util.ProtobufDecodePointList(params["prev_vals"].([]byte))
-			verifier := shuffle.Verifier(anonServer.Suite, nil, anonServer.PublicKey, prevKeyList,
-				prevValList, keyList, keyList)
+			prePublicKey := anonServer.Suite.Point()
+			prePublicKey.UnmarshalBinary(params["public_key"].([]byte))
+			verifier := shuffle.Verifier(anonServer.Suite, nil, prePublicKey, prevKeyList,
+				prevValList, xbarList, ybarList)
 			err := proof.HashVerify(anonServer.Suite, "PairShuffle", verifier, params["proof"].([]byte))
 			if err != nil {
 				panic("Shuffle verify failed: " + err.Error())
 			}
+			fmt.Println("[nefshuffle] Pass the proof!")
 		}
 		byteArr := params["vals"].([]util.ByteArray)
 		for i := 0; i < len(byteArr); i++ {
@@ -119,24 +125,41 @@ func handleRoundEnd(params map[string]interface{}) {
 		return
 	}
 
-	// *** perform neff shuffle here ***
+	Xori := make([]abstract.Point, len(newVals))
+	for i:=0; i < size; i++ {
+		Xori[i] = anonServer.Suite.Point().Mul(nil, anonServer.PrivateKey)
+	}
+	byteOri := util.ProtobufEncodePointList(Xori)
+
 	rand := anonServer.Suite.Cipher(abstract.RandomKey)
-	Xbar, Ybar, prover := shuffle.Shuffle(anonServer.Suite, nil, anonServer.PublicKey,
-		newKeys, newKeys, rand)
+	// *** perform neff shuffle here ***
+	Xbar, Ybar, _, Ytmp, prover := neffShuffle(Xori,newKeys,rand)
 	prf, err := proof.HashProve(anonServer.Suite, "PairShuffle", rand, prover)
 	util.CheckErr(err)
+
+
+	// this is the shuffled key
+	finalKeys := convertToOrigin(Ybar,Ytmp)
+	//
+	finalVals := rebindReputation(newKeys,newVals,finalKeys)
+
 	// send data to the next server
 	byteXbar := util.ProtobufEncodePointList(Xbar)
 	byteYbar := util.ProtobufEncodePointList(Ybar)
-
+	byteFinalKeys := util.ProtobufEncodePointList(finalKeys)
+	byteFinalVals := util.SerializeTwoDimensionArray(finalVals)
+	bytePublicKey, _ := anonServer.PublicKey.MarshalBinary()
 	// prev keys means the key before shuffle
 	pm := map[string]interface{}{
-		"keys" : byteXbar,
-		"vals" : byteYbar,
+		"xbar" : byteXbar,
+		"ybar" : byteYbar,
+		"keys" : byteFinalKeys,
+		"vals" : byteFinalVals,
 		"proof" : prf,
-		"prev_keys": byteNewKeys,
-		"prev_vals": byteNewVals,
+		"prev_keys": byteOri,
+		"prev_vals": byteNewKeys,
 		"shuffled":true,
+		"public_key" : bytePublicKey,
 	}
 	event := &proto.Event{proto.ROUND_END,pm}
 	util.Send(anonServer.Socket,anonServer.PreviousHop,util.Encode(event))
@@ -144,6 +167,38 @@ func handleRoundEnd(params map[string]interface{}) {
 	// reset RoundKey and key map
 	anonServer.Roundkey = anonServer.Suite.Secret().Pick(random.Stream)
 	anonServer.KeyMap = make(map[string]abstract.Point)
+}
+
+func rebindReputation(newKeys []abstract.Point, newVals [][]byte, finalKeys []abstract.Point) ([][]byte) {
+	size := len(newKeys)
+	ret := make([][]byte,size)
+	m := make(map[string][]byte)
+	for i := 0; i < size; i++ {
+		m[newKeys[i].String()] = newVals[i]
+	}
+	for i := 0; i < size; i++ {
+		ret[i] = m[finalKeys[i].String()]
+	}
+	return ret
+}
+
+func convertToOrigin(YbarEn, Ytmp []abstract.Point) ([]abstract.Point){
+	size := len(YbarEn)
+	yyy := make([]abstract.Point, size)
+
+	for i := 0; i < size; i++ {
+		yyy[i] = YbarEn[i]
+		Ytmp[i].Sub(yyy[i], Ytmp[i])
+	}
+	return Ytmp
+}
+
+// Y is the keys want to shuffle
+func neffShuffle(X []abstract.Point, Y []abstract.Point, rand abstract.Cipher) (Xbar, Ybar, Xtmp, Ytmp []abstract.Point, prover proof.Prover){
+
+	Xbar, Ybar, prover, Xtmp, Ytmp = shuffle.Shuffle(anonServer.Suite, nil, anonServer.PublicKey,
+		X, Y, rand)
+	return
 }
 
 // encrypt the public key and send to next hop
@@ -186,6 +241,7 @@ func handleAnnouncement(params map[string]interface{}) {
 		g = anonServer.Suite.Point().Mul(g,anonServer.Roundkey)
 		// verify the previous shuffle
 		// get the key list before shuffle
+		/*
 		if _, shuffled := params["shuffle"]; shuffled {
 			prevKeyList := 	util.ProtobufDecodePointList(params["prev_keys"].([]byte))
 			prevValList := util.ProtobufDecodePointList(params["prev_vals"].([]byte))
@@ -196,6 +252,7 @@ func handleAnnouncement(params map[string]interface{}) {
 				panic("Shuffle verify failed: " + err.Error())
 			}
 		}
+		*/
 	}else {
 		g = anonServer.Suite.Point().Mul(nil,anonServer.Roundkey)
 	}
@@ -233,6 +290,7 @@ func handleAnnouncement(params map[string]interface{}) {
 		return
 	}
 
+	/*
 	// *** perform neff shuffle here ***
 	rand := anonServer.Suite.Cipher(abstract.RandomKey)
 	Xbar, Ybar, prover := shuffle.Shuffle(anonServer.Suite, nil, anonServer.PublicKey,
@@ -242,13 +300,13 @@ func handleAnnouncement(params map[string]interface{}) {
 	// send data to the next server
 	byteXbar := util.ProtobufEncodePointList(Xbar)
 	byteYbar := util.ProtobufEncodePointList(Ybar)
-
+	*/
 	// prev keys means the key before shuffle
 	pm := map[string]interface{}{
-		"keys" : byteXbar,
-		"vals" : byteYbar,
+		"keys" : byteNewKeys,
+		"vals" : byteNewVals,
 		"g" :  byteG,
-		"proof" : prf,
+		"proof" : true,
 		"prev_keys": byteNewKeys,
 		"prev_vals": byteNewVals,
 		"shuffle": true,
