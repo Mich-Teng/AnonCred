@@ -2,10 +2,11 @@ package main
 import (
 
 	"fmt"
+	"util"
 	"github.com/dedis/crypto/nist"
 	"github.com/dedis/crypto/abstract"
+	"github.com/dedis/crypto/anon"
 	"github.com/dedis/crypto/random"
-	"util"
 )
 type Message struct {
 	Nym     map[string][]byte
@@ -13,6 +14,7 @@ type Message struct {
 
 
 func main() {
+	/*
 	suite1 := nist.NewAES128SHA256QR512()
 	l := make([]abstract.Point,1)
 	key := suite1.Secret().Pick(random.Stream)
@@ -26,12 +28,61 @@ func main() {
 	fmt.Println(m[keyList[0].String()])
 	fmt.Println(l[0].String())
 	fmt.Println(keyList[0].String())
-	/*
-	var a int = -1
-	c := util.IntToByte(a)
-	b := util.ByteToInt(c)
-	fmt.Println(b)
 	*/
+	/*
+	suite1 := nist.NewAES128SHA256QR512()
+	key := suite1.Secret().Pick(random.Stream)
+	publicKey := suite1.Point().Mul(nil,key)
+	var a int = 1
+	aBytes := util.IntToByte(a)
+	_,_,data := util.ElGamalEncrypt(suite1,publicKey,aBytes)
+	fmt.Println(data)
+	_,_,qdata := util.ElGamalEncrypt(suite1,publicKey,data)
+	fmt.Println(qdata)
+	*/
+
+	suite := nist.NewAES128SHA256QR512()
+	rand := suite.Cipher([]byte("example"))
+
+	// Create a public/private keypair (X[mine],x)
+	X := make([]abstract.Point, 1)
+	mine := 0                           // which public key is mine
+	x := suite.Secret().Pick(rand)      // create a private key x
+	X[mine] = suite.Point().Mul(nil, x) // corresponding public key X
+
+	// Encrypt a message with the public key
+	var a int = 3
+	M := util.IntToByte(a)
+	C := anon.Encrypt(suite, rand, M, anon.Set(X), false)
+	//fmt.Printf("Encryption of '%s':\n%s", string(M), hex.Dump(C))
+	//fmt.Println(string(C))
+
+	// another
+	rand = suite.Cipher([]byte("example"))
+	X1 := make([]abstract.Point, 1)
+	x1 := suite.Secret().Pick(rand)      // create a private key x
+	X1[0] = suite.Point().Mul(nil, x1) // corresponding public key X
+	C1 := anon.Encrypt(suite, rand, C, anon.Set(X1), false)
+
+	p,pdw := suite.Point().Pick(C1,random.)
+	suite.Point().
+	fmt.Println(C1)
+	pd, _ := p.Data()
+	fmt.Println(pd)
+	fmt.Println(pdw)
+suite.
+	// Decrypt the ciphertext with the private key
+	MM, err := anon.Decrypt(suite,pd , anon.Set(X1), 0, x1, false)
+	if err != nil {
+		panic(err.Error())
+	}
+	MF, err1 := anon.Decrypt(suite, MM, anon.Set(X), 0, x, false)
+	if err1 != nil {
+		panic(err.Error())
+	}
+
+	fmt.Println(util.ByteToInt(MF))
+
 	/*
 	suite1 := nist.NewAES128SHA256QR512()
 	suite2 := nist.NewAES128SHA256QR512()

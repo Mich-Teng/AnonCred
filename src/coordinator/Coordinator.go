@@ -27,6 +27,7 @@ type Coordinator struct {
 	// store client address
 	Clients map[string]*net.UDPAddr
 	// store reputation map
+	ReputationKeyMap map[string]abstract.Point
 	ReputationMap map[string]abstract.Point
 	// we only add new clients at the beginning of each round
 	// store the new clients's one-time pseudo nym
@@ -35,6 +36,7 @@ type Coordinator struct {
 	MsgLog []abstract.Point
 
 	DecryptedReputationMap map[string]int
+	DecryptedKeysMap map[string]abstract.Point
 
 
 
@@ -64,7 +66,7 @@ func (c *Coordinator) AddClient(key abstract.Point, val *net.UDPAddr) {
 			break
 		}
 	}
-	c.Clients[key] = val
+	c.Clients[key.String()] = val
 }
 
 // add server into topology
@@ -80,10 +82,22 @@ func (c *Coordinator) AddMsgLog(log abstract.Point) int{
 
 // get reputation
 func (c *Coordinator) GetReputation(key abstract.Point) int{
-	return c.DecryptedReputationMap[key]
+	return c.DecryptedReputationMap[key.String()]
 }
 
 func (c *Coordinator) AddClientInBuffer(nym abstract.Point) {
 	c.NewClientsBuffer = append(c.NewClientsBuffer, nym)
+}
+
+func (c *Coordinator) AddIntoDecryptedMap(key abstract.Point, val int) {
+	keyStr := key.String()
+	c.DecryptedKeysMap[keyStr] = key
+	c.DecryptedReputationMap[keyStr] = val
+}
+
+func (c *Coordinator) AddIntoRepMap(key abstract.Point, val abstract.Point) {
+	keyStr := key.String()
+	c.ReputationKeyMap[keyStr] = key
+	c.ReputationMap[keyStr] = val
 }
 

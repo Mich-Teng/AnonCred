@@ -6,14 +6,13 @@ import (
 	"errors"
 	"github.com/dedis/crypto/abstract"
 	"encoding/binary"
-	"fmt"
 	"os"
 	"net"
 	"encoding/gob"
 	"reflect"
 	"github.com/dedis/protobuf"
 	"github.com/dedis/crypto/nist"
-	"github.com/dedis/crypto/random"
+
 )
 
 func Encode(event interface{}) []byte {
@@ -25,14 +24,14 @@ func Encode(event interface{}) []byte {
 func Send(conn *net.UDPConn, addr *net.UDPAddr,content []byte) {
 	_,err := conn.WriteToUDP(content, addr)
 	if err != nil {
-		fmt.Printf("Couldn't send response %v", err)
+		panic(err.Error())
 	}
 }
 
 func SendToCoodinator(conn *net.UDPConn, content []byte) {
 	_,err := conn.Write(content)
 	if err != nil {
-		fmt.Printf("Couldn't send response %v", err)
+		panic(err.Error())
 	}
 }
 
@@ -68,6 +67,7 @@ func ProtobufDecodePointList(bytes []byte) []abstract.Point {
 
 func ByteToInt(b []byte) int {
 	myInt:= binary.BigEndian.Uint32(b)
+
 	return int(myInt)
 }
 
@@ -148,6 +148,7 @@ signatureBuffer []byte, g abstract.Point) error {
 	return nil
 }
 
+/*
 func ElGamalEncrypt(suite abstract.Suite, pubkey abstract.Point, message []byte) (
 K, C abstract.Point, remainder []byte) {
 
@@ -170,4 +171,5 @@ M abstract.Point) {
 	M = suite.Point().Sub(C, S)      // use to un-blind the message
 	return
 }
+*/
 // get the final data by message, _ = M.data()

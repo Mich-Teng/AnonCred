@@ -105,6 +105,8 @@ func main() {
 	dissentClient.Socket = conn
 	// start Listener
 	go startClientListener()
+	fmt.Println("[debug] My public key is: ")
+	fmt.Println(dissentClient.PublicKey)
 	// register itself to controller
 	register()
 

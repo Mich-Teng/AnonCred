@@ -73,18 +73,25 @@ func handleAnnouncement(params map[string]interface{}) {
 	//construct Decrypted reputation map
 	keyList := util.ProtobufDecodePointList(params["keys"].([]byte))
 	valList := util.ProtobufDecodePointList(params["vals"].([]byte))
-	anonCoordinator.DecryptedReputationMap = make(map[abstract.Point]int)
+	anonCoordinator.DecryptedReputationMap = make(map[string]int)
+	anonCoordinator.DecryptedKeysMap = make(map[string]abstract.Point)
+
 	for i := 0; i < len(keyList); i++ {
 		byteVal, _ := valList[i].Data()
+		fmt.Println(byteVal == nil)
+
 		val := util.ByteToInt(byteVal)
-		anonCoordinator.DecryptedReputationMap[keyList[i]] = val
+		anonCoordinator.AddIntoDecryptedMap(keyList[i],val)
 	}
+
+	fmt.Println("announce end key list : ")
+	fmt.Println(len(keyList))
 
 	// distribute g and hash table of ids to user
 	pm := map[string]interface{}{
 		"g": params["g"].([]byte),
 	}
-	fmt.Println(len(anonCoordinator.Clients))
+
 	event := &proto.Event{proto.ANNOUNCEMENT,pm}
 	for _,val := range anonCoordinator.Clients {
 		util.Send(anonCoordinator.Socket,val,util.Encode(event))
@@ -235,8 +242,9 @@ func handleVote(params map[string]interface{}) {
 		fmt.Print("vote: ")
 		fmt.Println(vote)
 
-		anonCoordinator.DecryptedReputationMap[targetNym] = anonCoordinator.DecryptedReputationMap[targetNym] + vote
-		fmt.Println(anonCoordinator.DecryptedReputationMap[targetNym])
+		anonCoordinator.DecryptedReputationMap[targetNym.String()] =
+					anonCoordinator.DecryptedReputationMap[targetNym.String()] + vote
+		fmt.Println(anonCoordinator.DecryptedReputationMap[targetNym.String()])
 		// generate reply msg to client
 		pm = map[string]interface{}{
 			"reply" : true,
@@ -254,9 +262,11 @@ func handleRoundEnd(params map[string]interface{}) {
 	// review reputation map
 	keyList := util.ProtobufDecodePointList(params["keys"].([]byte))
 	valList := util.ProtobufDecodePointList(params["vals"].([]byte))
-	anonCoordinator.ReputationMap = make(map[abstract.Point]abstract.Point)
+	anonCoordinator.ReputationMap = make(map[string]abstract.Point)
+	anonCoordinator.ReputationKeyMap = make(map[string]abstract.Point)
 	for i := 0; i < len(keyList); i++ {
-		anonCoordinator.ReputationMap[keyList[i]] = valList[i]
+		anonCoordinator.ReputationMap[keyList[i].String()] = valList[i]
+		anonCoordinator.ReputationKeyMap[keyList[i].String()] = keyList[i]
 	}
 	fmt.Print("handle round end. Entry in reputation map: ")
 	fmt.Println(len(anonCoordinator.ReputationMap))

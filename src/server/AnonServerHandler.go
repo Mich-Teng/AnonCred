@@ -80,7 +80,7 @@ func handleRoundEnd(params map[string]interface{}) {
 	newVals := make([]abstract.Point,size)
 	for i := 0 ; i < len(keyList); i++ {
 		// decrypt the public key
-		newKeys[i] = anonServer.KeyMap[keyList[i]]
+		newKeys[i] = anonServer.KeyMap[keyList[i].String()]
 		fmt.Println("keymap: ")
 		fmt.Println(anonServer.KeyMap)
 		fmt.Println("key: ")
@@ -88,6 +88,9 @@ func handleRoundEnd(params map[string]interface{}) {
 		fmt.Println(newKeys[i])
 		// encrypt the reputation using ElGamal algorithm
 		K,C,_ := util.ElGamalEncrypt(anonServer.Suite,anonServer.PublicKey,byteValList[i])
+		fmt.Println("[handle round end]elgamal decrypt data : ")
+		fmt.Println(len(byteValList[i]))
+		fmt.Println(byteValList[i])
 		newVals[i] = C
 		anonServer.A = K
 	}
@@ -101,10 +104,11 @@ func handleRoundEnd(params map[string]interface{}) {
 			"vals" : byteNewVals,
 		}
 		event := &proto.Event{proto.ROUND_END,pm}
+		fmt.Println(anonServer.PreviousHop)
 		util.Send(anonServer.Socket,anonServer.PreviousHop,util.Encode(event))
 		// reset RoundKey and key map
 		anonServer.Roundkey = anonServer.Suite.Secret().Pick(random.Stream)
-		anonServer.KeyMap = make(map[abstract.Point]abstract.Point)
+		anonServer.KeyMap = make(map[string]abstract.Point)
 		return
 	}
 
@@ -132,7 +136,7 @@ func handleRoundEnd(params map[string]interface{}) {
 
 	// reset RoundKey and key map
 	anonServer.Roundkey = anonServer.Suite.Secret().Pick(random.Stream)
-	anonServer.KeyMap = make(map[abstract.Point]abstract.Point)
+	anonServer.KeyMap = make(map[string]abstract.Point)
 }
 
 // encrypt the public key and send to next hop
@@ -152,7 +156,7 @@ func handleClientRegisterServerSide(params map[string]interface{}) {
 	util.Send(anonServer.Socket,anonServer.NextHop,util.Encode(event))
 	// add into key map
 	fmt.Println("[debug] Receive client register request... ")
-	anonServer.KeyMap[newKey] = publicKey
+	anonServer.KeyMap[newKey.String()] = publicKey
 }
 
 func handleUpdateNextHop(params map[string]interface{}) {
@@ -198,8 +202,10 @@ func handleAnnouncement(params map[string]interface{}) {
 		newKeys[i] = anonServer.Suite.Point().Mul(keyList[i],anonServer.Roundkey)
 		// decrypt the reputation using ElGamal algorithm
 		newVals[i] = util.ElGamalDecrypt(anonServer.Suite, anonServer.PrivateKey, anonServer.A, valList[i])
+		fmt.Println("[handle announcement]elgamal decrypt data : ")
+		fmt.Println(valList[i].Data())
 		// update key map
-		anonServer.KeyMap[newKeys[i]] = keyList[i]
+		anonServer.KeyMap[newKeys[i].String()] = keyList[i]
 	}
 	byteNewKeys := util.ProtobufEncodePointList(newKeys)
 	byteNewVals := util.ProtobufEncodePointList(newVals)

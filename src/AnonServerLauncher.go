@@ -46,7 +46,7 @@ func initAnonServer() {
 	A := suite.Point().Mul(nil, a)
 	RoundKey := suite.Secret().Pick(random.Stream)
 	anonServer = &server.AnonServer{ServerAddr,nil,suite,a,A,suite.Point(),nil,
-	false,ServerAddr,ServerAddr,make(map[abstract.Point]abstract.Point),nil,RoundKey}
+	false,ServerAddr,ServerAddr,make(map[string]abstract.Point),nil,RoundKey}
 }
 
 func main() {
@@ -54,7 +54,7 @@ func main() {
 	initAnonServer()
 	fmt.Println("[debug] AnonServer started...");
 	// check available port
-	for i := 10001; i <= 10005; i++ {
+	for i := 10002; i <= 10005; i++ {
 		conn, err := net.ListenUDP("udp", &net.UDPAddr{IP: net.IPv4zero, Port: i})
 		if err == nil {
 			// set socket

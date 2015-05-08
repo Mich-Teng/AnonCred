@@ -31,15 +31,16 @@ func startServerListener() {
 
 // initialize coordinator
 func initCoordinator() {
-	ServerAddr,err := net.ResolveUDPAddr("udp",":10001")
+	ServerAddr,err := net.ResolveUDPAddr("udp","127.0.0.1:10001")
 	util.CheckErr(err)
 	suite := nist.NewAES128SHA256QR512()
 	a := suite.Secret().Pick(random.Stream)
 	A := suite.Point().Mul(nil, a)
 
 	anonCoordinator = &coordinator.Coordinator{ServerAddr,nil,nil,
-		coordinator.CONFIGURATION,suite,a,A,nil, make(map[abstract.Point]*net.UDPAddr),
-		make(map[abstract.Point]abstract.Point), nil, nil, make(map[abstract.Point]int)}
+		coordinator.CONFIGURATION,suite,a,A,nil, make(map[string]*net.UDPAddr),
+		make(map[string]abstract.Point), make(map[string]abstract.Point), nil, nil,
+		make(map[string]int),make(map[string]abstract.Point)}
 }
 
 
@@ -63,7 +64,7 @@ func announce() {
 	vals := make([]abstract.Point,size)
 	i := 0
 	for k, v := range anonCoordinator.ReputationMap {
-		keys[i] = k
+		keys[i] = anonCoordinator.ReputationKeyMap[k]
 		vals[i] = v
 		i++
 	}
@@ -87,7 +88,7 @@ func roundEnd() {
 	}
 	// add new clients into reputation map
 	for _,nym := range anonCoordinator.NewClientsBuffer {
-		anonCoordinator.DecryptedReputationMap[nym] = 0
+		anonCoordinator.AddIntoDecryptedMap(nym,0)
 	}
 	// add previous clients into reputation map
 
@@ -97,11 +98,12 @@ func roundEnd() {
 	vals := make([]int,size)
 	i := 0
 	for k, v := range anonCoordinator.DecryptedReputationMap {
-		keys[i] = k
+		keys[i] = anonCoordinator.DecryptedKeysMap[k]
 		vals[i] = v
 		i++
 	}
 	fmt.Println(vals)
+	fmt.Println(keys)
 	byteKeys := util.ProtobufEncodePointList(keys)
 	// send signal to server
 	pm := map[string]interface{} {
@@ -111,7 +113,7 @@ func roundEnd() {
 	}
 	event := &proto.Event{proto.ROUND_END,pm}
 	util.Send(anonCoordinator.Socket,lastServer,util.Encode(event))
-	anonCoordinator.Status = coordinator.READY_FOR_NEW_ROUND
+
 }
 
 /**
