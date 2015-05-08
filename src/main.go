@@ -1,10 +1,11 @@
 package main
 import (
 
-	"util"
-	"github.com/dedis/crypto/nist"
-	"github.com/dedis/crypto/random"
 	"fmt"
+	"github.com/dedis/crypto/nist"
+	"github.com/dedis/crypto/abstract"
+	"github.com/dedis/crypto/random"
+	"util"
 )
 type Message struct {
 	Nym     map[string][]byte
@@ -12,6 +13,26 @@ type Message struct {
 
 
 func main() {
+	suite1 := nist.NewAES128SHA256QR512()
+	l := make([]abstract.Point,1)
+	key := suite1.Secret().Pick(random.Stream)
+	l[0] = suite1.Point().Mul(nil,key)
+	m := make(map[string]int)
+	m[l[0].String()] = 2
+	bytes := util.ProtobufEncodePointList(l)
+	keyList := util.ProtobufDecodePointList(bytes)
+
+	fmt.Println(m[l[0].String()])
+	fmt.Println(m[keyList[0].String()])
+	fmt.Println(l[0].String())
+	fmt.Println(keyList[0].String())
+	/*
+	var a int = -1
+	c := util.IntToByte(a)
+	b := util.ByteToInt(c)
+	fmt.Println(b)
+	*/
+	/*
 	suite1 := nist.NewAES128SHA256QR512()
 	suite2 := nist.NewAES128SHA256QR512()
 	suite3 := nist.NewAES128SHA256QR512()
@@ -32,6 +53,7 @@ func main() {
 	g3 = suite3.Point().Mul(g3,key)
 
 	fmt.Println(g3)
+	*/
 
 	/*
 	var aSecret abstract.Secret

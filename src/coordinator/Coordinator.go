@@ -25,16 +25,16 @@ type Coordinator struct {
 	G abstract.Point
 
 	// store client address
-	Clients map[abstract.Point]*net.UDPAddr
+	Clients map[string]*net.UDPAddr
 	// store reputation map
-	ReputationMap map[abstract.Point]abstract.Point
+	ReputationMap map[string]abstract.Point
 	// we only add new clients at the beginning of each round
 	// store the new clients's one-time pseudo nym
 	NewClientsBuffer []abstract.Point
 	// msg sender's record nym
 	MsgLog []abstract.Point
 
-	DecryptedReputationMap map[abstract.Point]int
+	DecryptedReputationMap map[string]int
 
 
 

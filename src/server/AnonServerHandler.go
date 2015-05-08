@@ -47,9 +47,9 @@ func Handle(buf []byte,addr *net.UDPAddr, tmpServer *AnonServer, n int) {
 func handleRoundEnd(params map[string]interface{}) {
 	keyList := util.ProtobufDecodePointList(params["keys"].([]byte))
 	size := len(keyList)
-
+	fmt.Println(size)
 	var byteValList = make([][]byte, size)
-	if _, ok := params["no_shuffle"]; ok {
+	if _, ok := params["is_start"]; ok {
 		valList := params["vals"].([]int)
 		// contains start, sent by coordinator
 		for i := 0; i < len(valList); i++ {
@@ -59,13 +59,15 @@ func handleRoundEnd(params map[string]interface{}) {
 		// sent by server
 		// verify the previous shuffle
 		valList := util.ProtobufDecodePointList(params["vals"].([]byte))
-		prevKeyList := 	util.ProtobufDecodePointList(params["prev_keys"].([]byte))
-		prevValList := util.ProtobufDecodePointList(params["prev_vals"].([]byte))
-		verifier := shuffle.Verifier(anonServer.Suite, nil, anonServer.PublicKey, prevKeyList,
-			prevValList, keyList, valList)
-		err := proof.HashVerify(anonServer.Suite, "PairShuffle", verifier, params["proof"].([]byte))
-		if err != nil {
-			panic("Shuffle verify failed: " + err.Error())
+		if _, shuffled := params["shuffled"]; shuffled {
+			prevKeyList := util.ProtobufDecodePointList(params["prev_keys"].([]byte))
+			prevValList := util.ProtobufDecodePointList(params["prev_vals"].([]byte))
+			verifier := shuffle.Verifier(anonServer.Suite, nil, anonServer.PublicKey, prevKeyList,
+				prevValList, keyList, valList)
+			err := proof.HashVerify(anonServer.Suite, "PairShuffle", verifier, params["proof"].([]byte))
+			if err != nil {
+				panic("Shuffle verify failed: " + err.Error())
+			}
 		}
 		// construct byte Val list
 		for i:=0; i < len(valList); i++ {
@@ -79,6 +81,11 @@ func handleRoundEnd(params map[string]interface{}) {
 	for i := 0 ; i < len(keyList); i++ {
 		// decrypt the public key
 		newKeys[i] = anonServer.KeyMap[keyList[i]]
+		fmt.Println("keymap: ")
+		fmt.Println(anonServer.KeyMap)
+		fmt.Println("key: ")
+		fmt.Println(keyList[i])
+		fmt.Println(newKeys[i])
 		// encrypt the reputation using ElGamal algorithm
 		K,C,_ := util.ElGamalEncrypt(anonServer.Suite,anonServer.PublicKey,byteValList[i])
 		newVals[i] = C
@@ -92,10 +99,9 @@ func handleRoundEnd(params map[string]interface{}) {
 		pm := map[string]interface{}{
 			"keys" : byteNewKeys,
 			"vals" : byteNewVals,
-			"no_shuffle" : true,
 		}
 		event := &proto.Event{proto.ROUND_END,pm}
-		util.Send(anonServer.Socket,anonServer.NextHop,util.Encode(event))
+		util.Send(anonServer.Socket,anonServer.PreviousHop,util.Encode(event))
 		// reset RoundKey and key map
 		anonServer.Roundkey = anonServer.Suite.Secret().Pick(random.Stream)
 		anonServer.KeyMap = make(map[abstract.Point]abstract.Point)
@@ -119,6 +125,7 @@ func handleRoundEnd(params map[string]interface{}) {
 		"proof" : prf,
 		"prev_keys": byteNewKeys,
 		"prev_vals": byteNewVals,
+		"shuffled":true,
 	}
 	event := &proto.Event{proto.ROUND_END,pm}
 	util.Send(anonServer.Socket,anonServer.PreviousHop,util.Encode(event))

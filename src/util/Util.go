@@ -67,14 +67,13 @@ func ProtobufDecodePointList(bytes []byte) []abstract.Point {
 }
 
 func ByteToInt(b []byte) int {
-	buf := bytes.NewBuffer(b) // b is []byte
-	myInt, _ := binary.ReadVarint(buf)
+	myInt:= binary.BigEndian.Uint32(b)
 	return int(myInt)
 }
 
 func IntToByte(n int) []byte {
 	buf := make([]byte, 4)
-	binary.LittleEndian.PutUint32(buf,uint32(n))
+	binary.BigEndian.PutUint32(buf,uint32(n))
 	return buf
 }
 

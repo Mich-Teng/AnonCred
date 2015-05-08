@@ -43,7 +43,7 @@ func Handle(buf []byte,addr *net.UDPAddr, tmpCoordinator *Coordinator, n int) {
 		handleVote(event.Params)
 		break
 	case proto.ROUND_END:
-		handleRoundEnd()
+		handleRoundEnd(event.Params)
 		break
 	case proto.ANNOUNCEMENT:
 		handleAnnouncement(event.Params)
@@ -230,7 +230,13 @@ func handleVote(params map[string]interface{}) {
 		msgID, _ := strconv.Atoi(commands[0])
 		vote, _ := strconv.Atoi(commands[1])
 		targetNym := anonCoordinator.MsgLog[msgID-1]
+		fmt.Println("target nym:")
+		fmt.Println(targetNym)
+		fmt.Print("vote: ")
+		fmt.Println(vote)
+
 		anonCoordinator.DecryptedReputationMap[targetNym] = anonCoordinator.DecryptedReputationMap[targetNym] + vote
+		fmt.Println(anonCoordinator.DecryptedReputationMap[targetNym])
 		// generate reply msg to client
 		pm = map[string]interface{}{
 			"reply" : true,
@@ -244,7 +250,17 @@ func handleVote(params map[string]interface{}) {
 
 // Handler for ROUND_END event
 // send user round end notification
-func handleRoundEnd() {
+func handleRoundEnd(params map[string]interface{}) {
+	// review reputation map
+	keyList := util.ProtobufDecodePointList(params["keys"].([]byte))
+	valList := util.ProtobufDecodePointList(params["vals"].([]byte))
+	anonCoordinator.ReputationMap = make(map[abstract.Point]abstract.Point)
+	for i := 0; i < len(keyList); i++ {
+		anonCoordinator.ReputationMap[keyList[i]] = valList[i]
+	}
+	fmt.Print("handle round end. Entry in reputation map: ")
+	fmt.Println(len(anonCoordinator.ReputationMap))
+
 	// send user round-end message
 	pm := map[string]interface{} {}
 	event := &proto.Event{proto.ROUND_END,pm}

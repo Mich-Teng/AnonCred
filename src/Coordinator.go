@@ -81,14 +81,16 @@ func announce() {
 func roundEnd() {
 	lastServer := anonCoordinator.GetLastServer()
 	if lastServer == nil {
+		fmt.Println("last server is nil")
 		anonCoordinator.Status = coordinator.READY_FOR_NEW_ROUND
 		return
 	}
 	// add new clients into reputation map
-
 	for _,nym := range anonCoordinator.NewClientsBuffer {
 		anonCoordinator.DecryptedReputationMap[nym] = 0
 	}
+	// add previous clients into reputation map
+
 	// construct the parameters
 	size := len(anonCoordinator.DecryptedReputationMap)
 	keys := make([]abstract.Point,size)
@@ -99,12 +101,13 @@ func roundEnd() {
 		vals[i] = v
 		i++
 	}
+	fmt.Println(vals)
 	byteKeys := util.ProtobufEncodePointList(keys)
 	// send signal to server
 	pm := map[string]interface{} {
 		"keys" : byteKeys,
 		"vals" : vals,
-		"no_shuffle" : false,
+		"is_start" : true,
 	}
 	event := &proto.Event{proto.ROUND_END,pm}
 	util.Send(anonCoordinator.Socket,lastServer,util.Encode(event))
