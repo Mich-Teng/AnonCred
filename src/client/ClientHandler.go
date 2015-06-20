@@ -114,7 +114,6 @@ func handleMsg(params map[string]interface{}, dissentClient *DissentClient) {
 	fmt.Println("Message ID: " + strconv.Itoa(msgID));
 	fmt.Println(text);
 	fmt.Println();
-
 }
 
 

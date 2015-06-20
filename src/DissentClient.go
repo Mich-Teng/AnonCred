@@ -3,14 +3,12 @@ package main
 import (
 	"fmt"
 	"net"
-
 	"./proto"
 	 "./util"
 	"./client"
 	"strconv"
 	"github.com/dedis/crypto/nist"
 	"github.com/dedis/crypto/random"
-
 	"bufio"
 	"os"
 	"strings"
@@ -19,9 +17,12 @@ import (
 
 )
 
+// pointer to client itself
 var dissentClient  *client.DissentClient
 
-// register itself to controller
+/**
+  * register itself to controller
+  */
 func register() {
 	// set the parameters to register
 	bytePublicKey, _ := dissentClient.PublicKey.MarshalBinary()
@@ -33,7 +34,9 @@ func register() {
 	util.SendToCoodinator(dissentClient.Socket,util.Encode(event))
 }
 
-// start listener to listen port
+/**
+  * start listener to handle event
+  */
 func startClientListener() {
 	fmt.Println("[debug] Client Listener started...");
 	buf := make([]byte, 4096)
@@ -46,12 +49,17 @@ func startClientListener() {
 	}
 }
 
-// send message to server
+/**
+  * send message text to server
+  */
 func sendMsg(text string) {
 	sendSigRequest(text,proto.MESSAGE)
 }
 
-// send signatured request to server
+/**
+  * send general request to server
+  * the request is encrypted by signature
+  */
 func sendSigRequest(text string, eventType int) {
 	// generate signature
 	rand := dissentClient.Suite.Cipher([]byte("example"))
@@ -69,9 +77,11 @@ func sendSigRequest(text string, eventType int) {
 	util.SendToCoodinator(dissentClient.Socket,util.Encode(event))
 }
 
-// send vote to server
+/**
+  * send vote to server
+  */
 func sendVote(msgID, vote int) {
-	// set the parameters to register
+	// vote can be only 1 or -1
 	if vote > 0 {
 		vote = 1;
 	}else {
@@ -83,7 +93,10 @@ func sendVote(msgID, vote int) {
 	sendSigRequest(text,proto.VOTE)
 }
 
-// initialize crypto variables
+
+/**
+  * initialize anonClient and encrypted parameters
+  */
 func initServer() {
 	// load controller ip and port
 	ServerAddr,err := net.ResolveUDPAddr("udp","127.0.0.1"+":"+ "10001")
@@ -94,6 +107,7 @@ func initServer() {
 	A := suite.Point().Mul(nil, a)
 	dissentClient = &client.DissentClient{ServerAddr,nil,client.CONFIGURATION,suite,a,A,suite.Point(),nil}
 }
+
 
 func main() {
 	initServer()

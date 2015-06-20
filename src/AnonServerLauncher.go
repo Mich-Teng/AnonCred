@@ -15,7 +15,9 @@ import (
 
 var anonServer *server.AnonServer
 
-// register itself to controller
+/**
+  * register itself to controller
+  */
 func serverRegister() {
 	// set the parameters to register
 	params := map[string]interface{}{}
@@ -24,6 +26,9 @@ func serverRegister() {
 	util.Send(anonServer.Socket,anonServer.CoordinatorAddr,util.Encode(event))
 }
 
+/**
+ * start anon server listener to handle event
+ */
 func startAnonServerListener() {
 	fmt.Println("[debug] AnonServer Listener started...");
 	buf := make([]byte, 4096)
@@ -36,6 +41,10 @@ func startAnonServerListener() {
 	}
 }
 
+/**
+ * initialize anon server
+ * set ip, port and encryption parameters
+ */
 func initAnonServer() {
 	// load controller ip and port
 	ServerAddr,err := net.ResolveUDPAddr("udp","127.0.0.1"+":"+ "10001")

@@ -16,9 +16,12 @@ import (
 	"proto"
 )
 
+// pointer to coordinator itself
 var anonCoordinator *coordinator.Coordinator
 
-// start server listener to read data
+/**
+  * start server listener to handle event
+  */
 func startServerListener() {
 	fmt.Println("[debug] Coordinator server listener started...");
 	buf := make([]byte, 4096)
@@ -29,7 +32,9 @@ func startServerListener() {
 	}
 }
 
-// initialize coordinator
+/**
+  * initialize coordinator
+  */
 func initCoordinator() {
 	ServerAddr,err := net.ResolveUDPAddr("udp","127.0.0.1:10001")
 	util.CheckErr(err)
@@ -44,6 +49,9 @@ func initCoordinator() {
 }
 
 
+/**
+ * clear all buffer data
+ */
 func clearBuffer() {
 	// clear buffer
 	anonCoordinator.NewClientsBuffer = nil
@@ -51,7 +59,10 @@ func clearBuffer() {
 	anonCoordinator.MsgLog = nil
 }
 
-// send the announcement notification to first server
+/**
+  * send announcement signal to first server
+  * send reputation list
+  */
 func announce() {
 	firstServer := anonCoordinator.GetFirstServer()
 	if firstServer == nil {
@@ -78,7 +89,10 @@ func announce() {
 	util.Send(anonCoordinator.Socket,firstServer,util.Encode(event))
 }
 
-// send round end signal and data to last server
+/**
+ * send round-end signal to last server in topology
+ * add new clients into the reputation map
+ */
 func roundEnd() {
 	lastServer := anonCoordinator.GetLastServer()
 	if lastServer == nil {
@@ -91,7 +105,6 @@ func roundEnd() {
 		anonCoordinator.AddIntoDecryptedMap(nym,0)
 	}
 	// add previous clients into reputation map
-
 	// construct the parameters
 	size := len(anonCoordinator.DecryptedReputationMap)
 	keys := make([]abstract.Point,size)
@@ -129,6 +142,7 @@ func vote() {
 	}
 }
 
+
 func main() {
 	// init coordinator
 	initCoordinator()
@@ -139,6 +153,7 @@ func main() {
 	// start listener
 	go startServerListener()
 	fmt.Println("** Note: Type ok to finish the server configuration. **")
+	// read ok to start life cycle
 	reader := bufio.NewReader(os.Stdin)
 	for {
 		data, _, _ := reader.ReadLine()
@@ -151,12 +166,14 @@ func main() {
 	fmt.Println(anonCoordinator.ServerList)
 	anonCoordinator.Status = coordinator.READY_FOR_NEW_ROUND
 	for {
+		// wait for the status changed to READY_FOR_NEW_ROUND
 		for i := 0; i < 100; i++ {
 			if anonCoordinator.Status == coordinator.READY_FOR_NEW_ROUND {
 				break
 			}
 			time.Sleep(1000 * time.Millisecond)
 		}
+		// clear buffer at the beginning of each round
 		clearBuffer()
 		fmt.Println("******************** New round begin ********************")
 		if anonCoordinator.Status != coordinator.READY_FOR_NEW_ROUND {
@@ -165,6 +182,7 @@ func main() {
 		}
 		anonCoordinator.Status = coordinator.ANNOUNCE
 		fmt.Println("[controller] Announcement phase started...")
+		// start announce phase
 		announce()
 		for i := 0; i < 100; i++ {
 			if anonCoordinator.Status == coordinator.MESSAGE {
@@ -176,6 +194,7 @@ func main() {
 			log.Fatal("Fails to be ready for message phase")
 			os.Exit(1)
 		}
+		// start message and vote phase
 		fmt.Println("[coordinator] Messaging phase started...")
 		// 10 secs for msg
 		time.Sleep(10000 * time.Millisecond)
