@@ -36,15 +36,10 @@ python.zoo.cs.yale.edu:12345,  viper.zoo.cs.yale.edu:12345
 
 1.  Launch servers and coordinator.  
 
-![github](http://github.com/unicorn.png "github") 
-
 2.  Type ok to finish registration and now the coordinator starts to launch each phase.
-
-![github](http://github.com/unicorn.png "github")
 
 3.  Launch the clients, sending message and voting. 
 
-![github](http://github.com/unicorn.png "github")
 
 
 
