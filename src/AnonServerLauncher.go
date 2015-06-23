@@ -14,6 +14,7 @@ import (
 )
 
 var anonServer *server.AnonServer
+var config map[string]string
 
 /**
   * register itself to controller
@@ -46,8 +47,9 @@ func startAnonServerListener() {
  * set ip, port and encryption parameters
  */
 func initAnonServer() {
+	config = util.ReadConfig()
 	// load controller ip and port
-	ServerAddr,err := net.ResolveUDPAddr("udp","127.0.0.1"+":"+ "10001")
+	ServerAddr,err := net.ResolveUDPAddr("udp",config["coordinator_ip"]+":"+ config["coordinator_port"])
 	util.CheckErr(err)
 	// initialize suite
 	suite := nist.NewAES128SHA256QR512()

@@ -99,7 +99,8 @@ func sendVote(msgID, vote int) {
   */
 func initServer() {
 	// load controller ip and port
-	ServerAddr,err := net.ResolveUDPAddr("udp","127.0.0.1"+":"+ "10001")
+	config := util.ReadConfig()
+	ServerAddr,err := net.ResolveUDPAddr("udp",config["coordinator_ip"]+":"+ config["coordinator_port"])
 	util.CheckErr(err)
 	// initialize suite
 	suite := nist.NewAES128SHA256QR512()
@@ -110,6 +111,7 @@ func initServer() {
 
 
 func main() {
+	// initialize parameters and server configurations
 	initServer()
 	fmt.Println("[debug] Client started...");
 	// make tcp connection to controller
@@ -152,5 +154,4 @@ func main() {
 	// close connection
 	conn.Close()
 	fmt.Println("[debug] Exit system...");
-
 }

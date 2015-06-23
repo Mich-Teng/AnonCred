@@ -36,7 +36,8 @@ func startServerListener() {
   * initialize coordinator
   */
 func initCoordinator() {
-	ServerAddr,err := net.ResolveUDPAddr("udp","127.0.0.1:10001")
+	config := util.ReadConfig()
+	ServerAddr,err := net.ResolveUDPAddr("udp","127.0.0.1:"+config["local_port"])
 	util.CheckErr(err)
 	suite := nist.NewAES128SHA256QR512()
 	a := suite.Secret().Pick(random.Stream)
