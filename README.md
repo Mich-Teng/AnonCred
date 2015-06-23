@@ -34,11 +34,24 @@ servers: scorpion.zoo.cs.yale.edu:12345,  frog.zoo.cs.yale.edu:12345
 #### clients:   
 python.zoo.cs.yale.edu:12345,  viper.zoo.cs.yale.edu:12345
 
-1.  Launch servers and coordinator.  
-![](https://drive.google.com/file/d/0BxQd2CmLMHMcVnhMUE9ZQ3cwLVk/view?usp=sharing)
-2.  Type ok to finish registration and now the coordinator starts to launch each phase.
+1.  Launch coordinator and servers. Type 'ok' in coordinator's terminal to finish server registration.
+![](https://www.dropbox.com/s/2nfvgayk1zyta8o/1.png?raw=true)
 
-3.  Launch the clients, sending message and voting. 
+2.  Launch clients.
+![](https://www.dropbox.com/s/f0ciu9dk3cv60v4/2.png?raw=true)
+
+3.  At the beginning of each round, you will get your one-time pseudo-name in this round. Type 'msg <text>' to send msg.
+![](https://www.dropbox.com/s/pdqq0n2t31moknn/3.png?raw=true)
+
+4. Other clients in network will receive message immediately. 
+![](https://www.dropbox.com/s/1mltogs4aauj3xe/4.png?raw=true)
+
+5. Vote by typing 'vote <msg_id> (+-)1' to vote for message. 
+![](https://www.dropbox.com/s/hydkqew8oym9kdu/5.png?raw=true)
+
+6. The reputation will be changed in the end of each round. Then, every client gets a new reputation now.
+![](https://www.dropbox.com/s/dnq8ab7611fj3le/6.png?raw=true)
+![](https://www.dropbox.com/s/kghusj7022gbixc/8.png?raw=true)
 
 
 
