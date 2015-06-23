@@ -11,6 +11,7 @@ import (
 	"github.com/dedis/crypto/random"
 	"github.com/dedis/crypto/abstract"
 	"./proto"
+	"strconv"
 )
 
 var anonServer *server.AnonServer
@@ -65,7 +66,9 @@ func main() {
 	initAnonServer()
 	fmt.Println("[debug] AnonServer started...");
 	// check available port
-	for i := 10002; i <= 10005; i++ {
+	localPort, err := strconv.Atoi(config["local_port"])
+	util.CheckErr(err)
+	for i := localPort; i <= localPort+3; i++ {
 		conn, err := net.ListenUDP("udp", &net.UDPAddr{IP: net.IPv4zero, Port: i})
 		if err == nil {
 			// set socket

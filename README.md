@@ -8,12 +8,12 @@ This is what you need to do to compile and run AnonCred:
 
 1.  Run `git clone https://github.com/Mich-Teng/AnonCred.git` to download source code and binary file on github. 
 
-2.  modify `local.properties` to config local port.      
-    modify `coordinator.properties` to config coordinator's ip and port. (for client and server only)
+2.  modify `config/local.properties` to config local port.      
+    modify `config/conn.properties` to config coordinator's ip and port. (for client and server only)
 
-3.  Run `go run $PROJECT_HOME/src/Coordinator.go` to start coordinator.       
-    Run `go run $PROJECT_HOME/src/DissentClient.go` to start client.     
-    Run `go run $PROJECT_HOME/src/AnonServerLauncher.go` to start server.       
+3.  Run `go run src/Coordinator.go` to start coordinator.       
+    Run `go run src/DissentClient.go` to start client.     
+    Run `go run src/AnonServerLauncher.go` to start server.       
 
 4.  Type `msg <msg_text>` to broadcast all the messages to clients or `vote <msg_id> <+-1>` to vote towards a specific message. (For client only)
 
@@ -35,7 +35,7 @@ servers: scorpion.zoo.cs.yale.edu:12345,  frog.zoo.cs.yale.edu:12345
 python.zoo.cs.yale.edu:12345,  viper.zoo.cs.yale.edu:12345
 
 1.  Launch servers and coordinator.  
-
+![](https://drive.google.com/file/d/0BxQd2CmLMHMcVnhMUE9ZQ3cwLVk/view?usp=sharing)
 2.  Type ok to finish registration and now the coordinator starts to launch each phase.
 
 3.  Launch the clients, sending message and voting. 
