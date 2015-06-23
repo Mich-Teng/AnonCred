@@ -56,6 +56,7 @@ func handleVotePhaseStart(dissentClient *DissentClient) {
 	if dissentClient.Status != MESSAGE {
 		return
 	}
+	fmt.Println()
 	// print out info in client side
 	fmt.Println("[client] Voting Phase begins.(cmd: vote <msg_id> (+-)1)")
 	fmt.Print("cmd >> ")
@@ -107,7 +108,7 @@ func handleAnnouncement(params map[string]interface{}, dissentClient *DissentCli
 	fmt.Println("[client] One-Time pseudonym for this round is ");
 	fmt.Println(nym);
 	fmt.Println("[client] Messaging Phase begins.(msg <msg_text>)");
-	fmt.Println("cmd >> ");
+	fmt.Print("cmd >> ");
 }
 
 // receive the One-time pseudonym, reputation, and msg from server side
