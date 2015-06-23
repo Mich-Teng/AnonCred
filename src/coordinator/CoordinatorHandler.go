@@ -60,7 +60,7 @@ func Handle(buf []byte,addr *net.UDPAddr, tmpCoordinator *Coordinator, n int) {
 func handleAnnouncement(params map[string]interface{}) {
 	// This event is triggered when server finishes announcement
 	// distribute final reputation map to servers
-	if params["g"] == nil {
+	if len(params["keys"].([]byte)) == 0 {
 		// suggest there is no client
 		anonCoordinator.Status = MESSAGE
 		return

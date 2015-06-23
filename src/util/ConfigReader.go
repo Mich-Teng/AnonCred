@@ -10,13 +10,15 @@ import (
 var config map[string]string
 
 func ReadConfig() map[string]string{
+	config = make(map[string]string)
 	readConnProperties()
 	readLocalProperties()
 	return config
 }
 
 func GetParameter(name string) string {
-	if len(config) == 0 {
+	if config == nil {
+		config = make(map[string]string)
 		readLocalProperties()
 		readConnProperties()
 	}
@@ -24,11 +26,11 @@ func GetParameter(name string) string {
 }
 
 func readLocalProperties() {
-	readConfig("../config/local.properties")
+	readConfig("config/local.properties")
 }
 
 func readConnProperties() {
-	readConfig("../config/local.properties")
+	readConfig("config/conn.properties")
 }
 
 

@@ -37,6 +37,7 @@ func startServerListener() {
   */
 func initCoordinator() {
 	config := util.ReadConfig()
+	fmt.Println(config)
 	ServerAddr,err := net.ResolveUDPAddr("udp","127.0.0.1:"+config["local_port"])
 	util.CheckErr(err)
 	suite := nist.NewAES128SHA256QR512()

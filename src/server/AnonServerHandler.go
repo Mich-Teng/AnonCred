@@ -97,13 +97,13 @@ func handleRoundEnd(params map[string]interface{}) {
 
 	newKeys := make([]abstract.Point,size)
 	newVals := make([][]byte,size)
-	for i := 0 ; i < len(keyList); i++ {
+	for i := 0 ; i < size; i++ {
 		// decrypt the public key
 		newKeys[i] = anonServer.KeyMap[keyList[i].String()]
 		// encrypt the reputation using ElGamal algorithm
 		C := anon.Encrypt(anonServer.Suite, rand1, byteValList[i], anon.Set(X), false)
 		fmt.Println("[handle round end]elgamal encrypt data : ")
-	//	fmt.Println(valList[i])
+		fmt.Println(newKeys[i])
 		newVals[i] = C
 	//	anonServer.A = K
 	}
@@ -313,6 +313,7 @@ func handleAnnouncement(params map[string]interface{}) {
 		"prev_vals": byteNewKeys,
 		"shuffled":true,
 		"public_key" : bytePublicKey,
+		"g" : byteG,
 	}
 	event := &proto.Event{proto.ANNOUNCEMENT,pm}
 	util.Send(anonServer.Socket,anonServer.NextHop,util.Encode(event))
