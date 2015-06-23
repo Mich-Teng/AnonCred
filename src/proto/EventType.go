@@ -28,4 +28,6 @@ const VOTE = 11
 const ROUND_END = 12
 // return vote status event
 const VOTE_REPLY = 13
+// return msg status event
+const MSG_REPLY = 14
 

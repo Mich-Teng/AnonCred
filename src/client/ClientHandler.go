@@ -33,6 +33,9 @@ func Handle(buf []byte,addr *net.UDPAddr, dissentClient *DissentClient, n int) {
 	case proto.VOTE_REPLY:
 		handleVoteReply(event.Params)
 		break
+	case proto.MSG_REPLY:
+		handleMsgReply(event.Params)
+		break;
 	default:
 		fmt.Println("Unrecognized request")
 		break
@@ -54,13 +57,14 @@ func handleVotePhaseStart(dissentClient *DissentClient) {
 		return
 	}
 	// print out info in client side
-	fmt.Println("*** [client] Vote Phase begins. Vote using the format... ***");
-	fmt.Println("vote <msg_id> (+-)1");
+	fmt.Println("[client] Voting Phase begins.(cmd: vote <msg_id> (+-)1)")
+	fmt.Print("cmd >> ")
 }
 
 // reset the status and prepare for the new round
 func handleRoundEnd(dissentClient *DissentClient) {
 	dissentClient.Status = CONNECTED
+	fmt.Println()
 	fmt.Println("[client] Round ended. Waiting for new round start...");
 }
 
@@ -68,9 +72,21 @@ func handleRoundEnd(dissentClient *DissentClient) {
 func handleVoteReply(params map[string]interface{}) {
 	status := params["reply"].(bool)
 	if status == true {
-		fmt.Println("Vote success!");
+		fmt.Println("[client] Voting success!");
+		fmt.Print("cmd >> ")
 	}else {
-		fmt.Println("Failure. Duplicate vote or verification fails!");
+		fmt.Println("[client] Failure. Duplicate vote or verification fails!");
+	}
+}
+
+// handle vote reply
+func handleMsgReply(params map[string]interface{}) {
+	status := params["reply"].(bool)
+	if status == true {
+		fmt.Println("[client] Messaging success!");
+		fmt.Print("cmd >> ")
+	}else {
+		fmt.Println("[client] Fails to send message!");
 	}
 }
 
@@ -90,13 +106,12 @@ func handleAnnouncement(params map[string]interface{}, dissentClient *DissentCli
 	// print out the msg to suggest user to send msg or vote
 	fmt.Println("[client] One-Time pseudonym for this round is ");
 	fmt.Println(nym);
-	fmt.Println("*** [client] Message Phase begins. Sending msg using the format... ***");
-	fmt.Println("msg <msg_text>");
+	fmt.Println("[client] Messaging Phase begins.(msg <msg_text>)");
+	fmt.Println("cmd >> ");
 }
 
 // receive the One-time pseudonym, reputation, and msg from server side
 func handleMsg(params map[string]interface{}, dissentClient *DissentClient) {
-
 	// get the reputation
 	rep := params["rep"].(int)
 	// get One-time pseudonym
@@ -107,12 +122,17 @@ func handleMsg(params map[string]interface{}, dissentClient *DissentClient) {
 	text := params["text"].(string)
 	// get msg id
 	msgID := params["msgID"].(int)
-	// print out in client side
+	// don't print for sender
+	if(dissentClient.OnetimePseudoNym.Equal(nym)) {
+		return
+	}
+	// print out message in client side
+	fmt.Println()
 	fmt.Print("Message from ")
 	fmt.Print(nym)
 	fmt.Println(" (reputation: " + strconv.Itoa(rep) + ")");
 	fmt.Println("Message ID: " + strconv.Itoa(msgID));
-	fmt.Println(text);
+	fmt.Println("Messafe Text: " + text);
 	fmt.Println();
 }
 

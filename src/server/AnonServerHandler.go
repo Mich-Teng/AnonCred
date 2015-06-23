@@ -71,7 +71,6 @@ func verifyNeffShuffle(params map[string]interface{}) {
 func handleRoundEnd(params map[string]interface{}) {
 	keyList := util.ProtobufDecodePointList(params["keys"].([]byte))
 	size := len(keyList)
-	fmt.Println(size)
 	byteValList := make([][]byte,size)
 	if _, ok := params["is_start"]; ok {
 		intValList := params["vals"].([]int)
@@ -102,10 +101,7 @@ func handleRoundEnd(params map[string]interface{}) {
 		newKeys[i] = anonServer.KeyMap[keyList[i].String()]
 		// encrypt the reputation using ElGamal algorithm
 		C := anon.Encrypt(anonServer.Suite, rand1, byteValList[i], anon.Set(X), false)
-		fmt.Println("[handle round end]elgamal encrypt data : ")
-		fmt.Println(newKeys[i])
 		newVals[i] = C
-	//	anonServer.A = K
 	}
 	byteNewKeys := util.ProtobufEncodePointList(newKeys)
 
@@ -119,7 +115,6 @@ func handleRoundEnd(params map[string]interface{}) {
 			"vals" : byteNewVals,
 		}
 		event := &proto.Event{proto.ROUND_END,pm}
-		fmt.Println(anonServer.PreviousHop)
 		util.Send(anonServer.Socket,anonServer.PreviousHop,util.Encode(event))
 		// reset RoundKey and key map
 		anonServer.Roundkey = anonServer.Suite.Secret().Pick(random.Stream)

@@ -81,9 +81,6 @@ func handleAnnouncement(params map[string]interface{}) {
 		anonCoordinator.AddIntoDecryptedMap(keyList[i],val)
 	}
 
-	fmt.Println("announce end key list : ")
-	fmt.Println(len(keyList))
-
 	// distribute g and hash table of ids to user
 	pm := map[string]interface{}{
 		"g": params["g"].([]byte),
@@ -199,7 +196,12 @@ func handleMsg(params map[string]interface{}) {
 	for _,val := range anonCoordinator.Clients {
 		util.Send(anonCoordinator.Socket,val,util.Encode(event))
 	}
-
+	// send confirmation to msg sender
+	pm_msg := map[string]interface{}{
+		"reply" : true,
+	}
+	event1 := &proto.Event{proto.MSG_REPLY,pm_msg}
+	util.Send(anonCoordinator.Socket,srcAddr,util.Encode(event1))
 }
 
 // verify the vote and reply to client
@@ -234,14 +236,9 @@ func handleVote(params map[string]interface{}) {
 		msgID, _ := strconv.Atoi(commands[0])
 		vote, _ := strconv.Atoi(commands[1])
 		targetNym := anonCoordinator.MsgLog[msgID-1]
-		fmt.Println("target nym:")
-		fmt.Println(targetNym)
-		fmt.Print("vote: ")
-		fmt.Println(vote)
 
 		anonCoordinator.DecryptedReputationMap[targetNym.String()] =
 					anonCoordinator.DecryptedReputationMap[targetNym.String()] + vote
-		fmt.Println(anonCoordinator.DecryptedReputationMap[targetNym.String()])
 		// generate reply msg to client
 		pm = map[string]interface{}{
 			"reply" : true,
@@ -265,8 +262,6 @@ func handleRoundEnd(params map[string]interface{}) {
 		anonCoordinator.ReputationMap[keyList[i].String()] = valList[i].Arr
 		anonCoordinator.ReputationKeyMap[keyList[i].String()] = keyList[i]
 	}
-	fmt.Print("handle round end. Entry in reputation map: ")
-	fmt.Println(len(anonCoordinator.ReputationMap))
 
 	// send user round-end message
 	pm := map[string]interface{} {}

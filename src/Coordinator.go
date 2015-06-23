@@ -98,7 +98,6 @@ func announce() {
 func roundEnd() {
 	lastServer := anonCoordinator.GetLastServer()
 	if lastServer == nil {
-		fmt.Println("last server is nil")
 		anonCoordinator.Status = coordinator.READY_FOR_NEW_ROUND
 		return
 	}
@@ -117,8 +116,6 @@ func roundEnd() {
 		vals[i] = v
 		i++
 	}
-	fmt.Println(vals)
-	fmt.Println(keys)
 	byteKeys := util.ProtobufEncodePointList(keys)
 	// send signal to server
 	pm := map[string]interface{} {
@@ -164,7 +161,7 @@ func main() {
 			break
 		}
 	}
-	fmt.Println("[coordinator] Servers in the current network:")
+	fmt.Println("[debug] Servers in the current network:")
 	fmt.Println(anonCoordinator.ServerList)
 	anonCoordinator.Status = coordinator.READY_FOR_NEW_ROUND
 	for {
@@ -183,7 +180,7 @@ func main() {
 			os.Exit(1)
 		}
 		anonCoordinator.Status = coordinator.ANNOUNCE
-		fmt.Println("[controller] Announcement phase started...")
+		fmt.Println("[coordinator] Announcement phase started...")
 		// start announce phase
 		announce()
 		for i := 0; i < 100; i++ {
@@ -201,7 +198,7 @@ func main() {
 		// 10 secs for msg
 		time.Sleep(10000 * time.Millisecond)
 		vote()
-		fmt.Println("[controller] Voting phase started...")
+		fmt.Println("[coordinator] Voting phase started...")
 		// 10 secs for vote
 		time.Sleep(10000 * time.Millisecond)
 		roundEnd()
